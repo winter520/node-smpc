@@ -1,0 +1,23 @@
+[2019-12-06T17:50:21.478][ INFO  15304  DB] db.js
+[2019-12-06T17:50:21.480][ INFO  15304  DB] mongodb://user:123456@54.183.185.30:27017/ccdex
+[2019-12-06T17:50:22.165][ INFO  15304  DB] db.js
+[2019-12-06T17:50:22.165][ INFO  15304  DB] Mongoose connection success: mongodb://user:123456@54.183.185.30:27017/ccdex
+[2019-12-06T18:02:03.181][ INFO  3592  DB] db.js
+[2019-12-06T18:02:03.184][ INFO  3592  DB] mongodb://localhost:27017/smpc
+[2019-12-06T18:02:04.226][ INFO  3592  DB] db.js
+[2019-12-06T18:02:04.226][ INFO  3592  DB] Mongoose connection success: mongodb://localhost:27017/smpc
+[2019-12-06T18:03:39.921][ INFO  3592  DB] Mongoose connection disconnected
+[2019-12-06T18:04:02.517][ INFO  17508  DB] db.js
+[2019-12-06T18:04:02.519][ INFO  17508  DB] mongodb://localhost:27017/smpc
+[2019-12-06T18:04:03.538][ INFO  17508  DB] db.js
+[2019-12-06T18:04:03.538][ INFO  17508  DB] Mongoose connection success: mongodb://localhost:27017/smpc
+[2019-12-06T18:05:54.682][ INFO  17508  DB] Mongoose connection disconnected
+[2019-12-06T18:19:54.441][ INFO  10820  DB] db.js
+[2019-12-06T18:19:54.443][ INFO  10820  DB] mongodb://localhost:27017/smpc
+[2019-12-06T18:19:55.465][ INFO  10820  DB] db.js
+[2019-12-06T18:19:55.465][ INFO  10820  DB] Mongoose connection success: mongodb://localhost:27017/smpc
+[2019-12-06T18:20:06.868][ INFO  10820  DB] Mongoose connection disconnected
+[2019-12-06T18:20:22.987][ INFO  17332  DB] db.js
+[2019-12-06T18:20:22.990][ INFO  17332  DB] mongodb://localhost:27017/smpc
+[2019-12-06T18:20:24.009][ INFO  17332  DB] db.js
+[2019-12-06T18:20:24.010][ INFO  17332  DB] Mongoose connection success: mongodb://localhost:27017/smpc
