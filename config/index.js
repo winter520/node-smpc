@@ -21,7 +21,7 @@ let publicSet = {
   /**
    * @description 数据库地址
    */
-  mongoDBurl: 'mongodb://localhost:27017/smpc',
+  mongoDBurl: 'mongodb://smpc:Fusion123456@139.196.26.212:27017/smpc',
   /**
    * @description 链接节点RPC地址
    */
@@ -53,6 +53,7 @@ let publicSet = {
 //   publicSet.mongoDBurl = 'mongodb://54.183.185.30:27017/ccdex'
 // }
 // publicSet.mongoDBurl = 'mongodb://user:123456@54.183.185.30:27017/ccdex'
-publicSet.mongoDBurl = 'mongodb://smpc:123456@localhost:27017/smpc'
+// publicSet.mongoDBurl = 'mongodb://smpc:123456@localhost:27017/smpc'
+publicSet.mongoDBurl = 'mongodb://139.196.26.212:27017/smpc',
 
 module.exports = publicSet

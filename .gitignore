@@ -1,0 +1,5 @@
+
+*.log
+*.log
+logs/info-.2020-01-13.log
+logs/*
