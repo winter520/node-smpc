@@ -70,8 +70,8 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
     info: ''
   }
   if (req) {
-    if (req.id || req.id === 0) {
-      params._id = req.id
+    if (req.keyId || req.keyId === 0) {
+      params.keyId = req.keyId
     }
     if (req.eNode) {
       params['member.eNode'] = req.eNode
@@ -141,6 +141,9 @@ function GroupTxnsFind (socket, type, req) {
     if (req.gId) {
       params.gId = req.gId
     }
+    if (req.key) {
+      params.key = req.key
+    }
     if (req.from || req.from === 0) {
       params.from = req.from
     }
@@ -155,6 +158,10 @@ function GroupTxnsFind (socket, type, req) {
     }
     if (req.status || req.status === 0) {
       params.status = req.status
+    }
+    if (req.kId || req.kId === 0) {
+      // params.account = req.account
+      params.member = {$elemMatch: {kId: req.kId}}
     }
   }
   
