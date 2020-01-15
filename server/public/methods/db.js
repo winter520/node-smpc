@@ -47,14 +47,22 @@ const PersonTxns = new Schema({
   eNode: {type: String},
 }, {collection: "PersonTxns"})
 
+const NodeInfos = new Schema({
+  url: {type: String, unique: true},
+  name: {type: String},
+  sortId: {type: Number},
+}, {collection: "NodeInfos"})
+
 GroupTxns.index({timestamp: -1}, {background: 1})
 PersonTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
+NodeInfos.index({sortId: -1}, {background: 1})
 
 
 mongoose.model('GroupTxns', GroupTxns)
 mongoose.model('PersonTxns', PersonTxns)
 mongoose.model('GroupAccounts', GroupAccounts)
+mongoose.model('NodeInfos', NodeInfos)
 
 
 mongoose.Promise = global.Promise
@@ -93,4 +101,5 @@ module.exports = {
   GroupTxns: mongoose.model('GroupTxns'),
   PersonTxns: mongoose.model('PersonTxns'),
   GroupAccounts: mongoose.model('GroupAccounts'),
+  NodeInfos: mongoose.model('NodeInfos'),
 }

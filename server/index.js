@@ -5,6 +5,7 @@ const pathLink = path
 const PersonTxns = require(pathLink + '/server/smpc/person/index')
 const GroupAccounts = require(pathLink + '/server/smpc/group/account')
 const GroupTxns = require(pathLink + '/server/smpc/group/txns')
+const NodeInfos = require(pathLink + '/server/smpc/node/index')
 
 
 function PersonTxnsFn (socket, io) {
@@ -52,6 +53,12 @@ function GroupTxnsFn (socket, io) {
   })
 }
 
+function NodeInfosFn (socket, io) {
+  socket.on('getNodeInfos', (req) => {
+    NodeInfos.getNodeInfos(socket, 'getNodeInfos', req, io)
+  })
+}
+
 function StartSocket (socket, io) {
   /**
    * 个人交易
@@ -62,9 +69,13 @@ function StartSocket (socket, io) {
    */
   GroupTxnsFn(socket, io)
   /**
-   * 
+   * 共管账户
    */
   GroupAccountsFn(socket, io)
+  /**
+   * 节点设置
+   */
+  NodeInfosFn(socket, io)
 }
 
 module.exports = StartSocket
