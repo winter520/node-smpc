@@ -112,6 +112,9 @@ function changeGroupTxnsStatus (socket, type, req) {
     if (req.status || req.status === 0) {
       updateParams['status'] = req.status
     }
+    if (req.hash || req.hash === 0) {
+      updateParams['hash'] = req.hash
+    }
   }
   logger.info('changeGroupTxnsStatus')
   logger.info(req)
