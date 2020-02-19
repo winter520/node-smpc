@@ -30,6 +30,7 @@ const GroupAccounts = new Schema({
   timestamp: {type: Number},
   status: {type: Number, default: 0},
   mode: {type: String},
+  pubKey: {type: String},
 }, {collection: "GroupAccounts"})
 
 const PersonTxns = new Schema({

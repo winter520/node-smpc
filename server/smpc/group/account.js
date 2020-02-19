@@ -50,6 +50,8 @@ function GroupAccountEdit (params, updateParams, socket, type) {
     msg: 'Error',
     info: ''
   }
+  logger.info(params)
+  logger.info(updateParams)
   GroupAccounts.updateOne(params, updateParams).exec((err, res) => {
     if (err) {
       logger.error(err)
@@ -86,11 +88,14 @@ function GroupAccountsEdit (socket, type, req) {
 function changeGroupAccountsEdit (socket, type, req) {
   let params = {}, updateParam = {}
   if (req) {
-    if (req.keyId || req.keyId === 0) {
-      params.keyId = req.keyId
+    if (req.id || req.id === 0) {
+      params._id = req.id
     }
     if (req.status || req.status === 0) {
       updateParam.status = req.status
+    }
+    if (req.pubKey || req.pubKey === 0) {
+      updateParam.pubKey = req.pubKey
     }
   }
   GroupAccountEdit(params, updateParam, socket, type)
