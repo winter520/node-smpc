@@ -19,6 +19,7 @@ const GroupTxns = new Schema({
   hash: {type: String},
   status: {type: Number, default: 0},
   timestamp: {type: Number},
+  pubKey: {type: String},
 }, {collection: "GroupTxns"})
 
 const GroupAccounts = new Schema({

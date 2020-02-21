@@ -32,6 +32,7 @@ function GroupTxnsAdd (socket, type, req) {
     hash: req.hash ? req.hash : '',
     status: req.status ? req.status : 0,
     timestamp: dateNow,
+    pubKey: req.pubKey ? req.pubKey : '',
   }
   let data = {
     msg: 'Error',
@@ -82,6 +83,7 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
     }
     if (req.kId || req.kId === 0) {
       updateParams['member.$.kId'] = req.kId
+      updateParam['member.$.timestamp'] = Date.now()
     }
   }
   logger.info('changeGroupMemberTxnsStatus')

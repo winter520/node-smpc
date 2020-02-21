@@ -50,6 +50,7 @@ function GroupAccountEdit (params, updateParams, socket, type) {
     msg: 'Error',
     info: ''
   }
+  logger.info('GroupAccountEdit')
   logger.info(params)
   logger.info(updateParams)
   GroupAccounts.updateOne(params, updateParams).exec((err, res) => {
@@ -76,6 +77,7 @@ function GroupAccountsEdit (socket, type, req) {
     }
     if (req.status || req.status === 0) {
       updateParam['member.$.status'] = req.status
+      updateParam['member.$.timestamp'] = Date.now()
       if (req.status === 4 || req.status === 6) {
         updateParam.status = req.status
       }
