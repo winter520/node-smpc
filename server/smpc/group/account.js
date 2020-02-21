@@ -67,7 +67,7 @@ function GroupAccountEdit (params, updateParams, socket, type) {
 }
 
 function GroupAccountsEdit (socket, type, req) {
-  let params = {}, updateParam = {}
+  let params = {}, updateParams = {}
   if (req) {
     if (req.keyId || req.keyId === 0) {
       params.keyId = req.keyId
@@ -76,31 +76,31 @@ function GroupAccountsEdit (socket, type, req) {
       params['member.kId'] = req.kId
     }
     if (req.status || req.status === 0) {
-      updateParam['member.$.status'] = req.status
-      updateParam['member.$.timestamp'] = Date.now()
+      updateParams['member.$.status'] = req.status
+      updateParams['member.$.timestamp'] = Date.now()
       if (req.status === 4 || req.status === 6) {
-        updateParam.status = req.status
+        updateParams.status = req.status
       }
     }
   }
 
-  GroupAccountEdit(params, updateParam, socket, type)
+  GroupAccountEdit(params, updateParams, socket, type)
 }
 
 function changeGroupAccountsEdit (socket, type, req) {
-  let params = {}, updateParam = {}
+  let params = {}, updateParams = {}
   if (req) {
     if (req.id || req.id === 0) {
       params._id = req.id
     }
     if (req.status || req.status === 0) {
-      updateParam.status = req.status
+      updateParams.status = req.status
     }
     if (req.pubKey || req.pubKey === 0) {
-      updateParam.pubKey = req.pubKey
+      updateParams.pubKey = req.pubKey
     }
   }
-  GroupAccountEdit(params, updateParam, socket, type)
+  GroupAccountEdit(params, updateParams, socket, type)
 }
 
 function GroupAccountsFind (socket, type, req) {

@@ -83,7 +83,7 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
     }
     if (req.kId || req.kId === 0) {
       updateParams['member.$.kId'] = req.kId
-      updateParam['member.$.timestamp'] = Date.now()
+      updateParams['member.$.timestamp'] = Date.now()
     }
   }
   logger.info('changeGroupMemberTxnsStatus')
