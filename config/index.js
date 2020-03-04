@@ -54,6 +54,6 @@ let publicSet = {
 // }
 // publicSet.mongoDBurl = 'mongodb://user:123456@54.183.185.30:27017/ccdex'
 // publicSet.mongoDBurl = 'mongodb://smpc:123456@localhost:27017/smpc'
-publicSet.mongoDBurl = 'mongodb://139.196.26.212:27017/smpc',
+// publicSet.mongoDBurl = 'mongodb://139.196.26.212:27017/smpc',
 
 module.exports = publicSet

@@ -174,9 +174,26 @@ function GroupAccountsFind (socket, type, req) {
   })
 }
 
-module.exports = {
-  Add: GroupAccountsAdd,
-  Edit: GroupAccountsEdit,
-  Find: GroupAccountsFind,
-  changeGroupAccountsEdit: changeGroupAccountsEdit
+function GroupAccountsFn (socket, io) {
+  socket.on('GroupAccountsAdd', (req) => {
+    GroupAccountsAdd(socket, 'GroupAccountsAdd', req, io)
+  })
+  socket.on('GroupAccountsEdit', (req) => {
+    GroupAccountsEdit(socket, 'GroupAccountsEdit', req, io)
+  })
+  socket.on('GroupAccountsFind', (req) => {
+    GroupAccountsFind(socket, 'GroupAccountsFind', req, io)
+  })
+  socket.on('changeGroupAccountsEdit', (req) => {
+    changeGroupAccountsEdit(socket, 'changeGroupAccountsEdit', req, io)
+  })
 }
+
+module.exports = GroupAccountsFn
+
+// module.exports = {
+//   Add: GroupAccountsAdd,
+//   Edit: GroupAccountsEdit,
+//   Find: GroupAccountsFind,
+//   changeGroupAccountsEdit: changeGroupAccountsEdit
+// }

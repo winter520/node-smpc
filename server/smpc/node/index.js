@@ -23,6 +23,13 @@ function getNodeInfos (socket, type, req) {
   })
 }
 
-module.exports = {
-  getNodeInfos
+function NodeInfosFn (socket, io) {
+  socket.on('getNodeInfos', (req) => {
+    getNodeInfos(socket, 'getNodeInfos', req, io)
+  })
 }
+
+module.exports = NodeInfosFn
+// module.exports = {
+//   getNodeInfos
+// }

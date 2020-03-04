@@ -55,16 +55,37 @@ const NodeInfos = new Schema({
   sortId: {type: Number},
 }, {collection: "NodeInfos"})
 
+const UserInfo = new Schema({
+  username: {type: String, unique: true},
+  address: {type: String},
+  timestamp: {type: Number},
+  password: {type: String},
+  ks: {type: String},
+}, {collection: "UserInfo"})
+
+const VersionInfo = new Schema({
+  name: {type: String},
+  version: {type: String, unique: true},
+  level: {type: Number},
+  url: {type: String},
+  updateInfo: {type: String},
+  timestamp: {type: Number},
+}, {collection: "VersionInfo"})
+
 GroupTxns.index({timestamp: -1}, {background: 1})
 PersonTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
 NodeInfos.index({sortId: -1}, {background: 1})
+UserInfo.index({timestamp: -1}, {background: 1})
+VersionInfo.index({timestamp: -1}, {background: 1})
 
 
 mongoose.model('GroupTxns', GroupTxns)
 mongoose.model('PersonTxns', PersonTxns)
 mongoose.model('GroupAccounts', GroupAccounts)
 mongoose.model('NodeInfos', NodeInfos)
+mongoose.model('UserInfo', UserInfo)
+mongoose.model('VersionInfo', VersionInfo)
 
 
 mongoose.Promise = global.Promise
@@ -104,4 +125,6 @@ module.exports = {
   PersonTxns: mongoose.model('PersonTxns'),
   GroupAccounts: mongoose.model('GroupAccounts'),
   NodeInfos: mongoose.model('NodeInfos'),
+  UserInfo: mongoose.model('UserInfo'),
+  VersionInfo: mongoose.model('VersionInfo'),
 }

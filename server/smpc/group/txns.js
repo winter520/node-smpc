@@ -206,10 +206,28 @@ function GroupTxnsFind (socket, type, req) {
   })
 }
 
-module.exports = {
-  Add: GroupTxnsAdd,
-  // Edit: GroupTxnsEdit,
-  Find: GroupTxnsFind,
-  changeGroupMemberTxnsStatus: changeGroupMemberTxnsStatus,
-  changeGroupTxnsStatus: changeGroupTxnsStatus,
+function GroupTxnsFn (socket, io) {
+  socket.on('GroupAddTxns', (req) => {
+    GroupTxnsAdd(socket, 'GroupAddTxns', req, io)
+  })
+  // socket.on('GroupEditTxns', (req) => {
+  //   GroupTxns.Edit(socket, 'GroupEditTxns', req, io)
+  // })
+  socket.on('changeGroupMemberTxnsStatus', (req) => {
+    changeGroupMemberTxnsStatus(socket, 'changeGroupMemberTxnsStatus', req, io)
+  })
+  socket.on('changeGroupTxnsStatus', (req) => {
+    changeGroupTxnsStatus(socket, 'changeGroupTxnsStatus', req, io)
+  })
+  socket.on('GroupFindTxns', (req) => {
+    GroupTxnsFind(socket, 'GroupFindTxns', req, io)
+  })
 }
+module.exports = GroupTxnsFn
+// module.exports = {
+//   Add: GroupTxnsAdd,
+//   // Edit: GroupTxnsEdit,
+//   Find: GroupTxnsFind,
+//   changeGroupMemberTxnsStatus: changeGroupMemberTxnsStatus,
+//   changeGroupTxnsStatus: changeGroupTxnsStatus,
+// }
