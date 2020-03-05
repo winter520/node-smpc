@@ -143,6 +143,9 @@ function GroupAccountsFind (socket, type, req) {
   async.waterfall([
     (cb) => {
       GroupAccounts.find(params).sort({'timestamp': -1}).skip(Number(_params.skip)).limit(Number(_params.pageSize)).exec((err, res) => {
+        logger.info(type, 0)
+        logger.info(err)
+        logger.info(res)
         if (err) {
           cb(err)
         } else {
@@ -153,6 +156,8 @@ function GroupAccountsFind (socket, type, req) {
     },
     (list, cb) => {
       GroupAccounts.find(params).countDocuments((err, results) => {
+        logger.info(err)
+        logger.info(results)
         if (err) {
           cb(err)
         } else {
@@ -170,7 +175,7 @@ function GroupAccountsFind (socket, type, req) {
     } else {
       data.msg = 'Success'
     }
-    logger.info('GroupAccountsFind')
+    logger.info(type)
     logger.info(data)
     socket.emit(type, data)
   })
