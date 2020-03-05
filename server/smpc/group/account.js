@@ -156,6 +156,7 @@ function GroupAccountsFind (socket, type, req) {
     },
     (list, cb) => {
       GroupAccounts.find(params).countDocuments((err, results) => {
+        logger.info(type, 1)
         logger.info(err)
         logger.info(results)
         if (err) {
