@@ -65,11 +65,13 @@ const UserInfo = new Schema({
 
 const VersionInfo = new Schema({
   name: {type: String},
-  version: {type: String, unique: true},
   level: {type: Number},
-  url: {type: String},
+  version: {type: String, unique: true},
   updateInfo: {type: String},
   timestamp: {type: Number},
+  winUrl: {type: String},
+  macUrl: {type: String},
+  linusUrl: {type: String},
 }, {collection: "VersionInfo"})
 
 GroupTxns.index({timestamp: -1}, {background: 1})

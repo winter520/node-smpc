@@ -170,6 +170,8 @@ function GroupAccountsFind (socket, type, req) {
     } else {
       data.msg = 'Success'
     }
+    logger.info('GroupAccountsFind')
+    logger.info(data)
     socket.emit(type, data)
   })
 }
