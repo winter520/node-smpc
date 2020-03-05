@@ -137,15 +137,15 @@ function GroupAccountsFind (socket, type, req) {
     }
   }
   
-  logger.info('group')
+  logger.info(type)
   logger.info(req)
   logger.info(params)
   async.waterfall([
     (cb) => {
       GroupAccounts.find(params).sort({'timestamp': -1}).skip(Number(_params.skip)).limit(Number(_params.pageSize)).exec((err, res) => {
-        logger.info(type, 0)
-        logger.info(err)
-        logger.info(res)
+        // logger.info(type, 0)
+        // logger.info(err)
+        // logger.info(res)
         if (err) {
           cb(err)
         } else {
@@ -156,9 +156,9 @@ function GroupAccountsFind (socket, type, req) {
     },
     (list, cb) => {
       GroupAccounts.find(params).countDocuments((err, results) => {
-        logger.info(type, 1)
-        logger.info(err)
-        logger.info(results)
+        // logger.info(type, 1)
+        // logger.info(err)
+        // logger.info(results)
         if (err) {
           cb(err)
         } else {
