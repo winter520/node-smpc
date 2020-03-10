@@ -1,7 +1,7 @@
 const path = require('path').resolve('.')
 const pathLink = path
 
-const GroupAccounts = require(pathLink + '/server/smpc/group/account')
+const GroupAccounts = require(pathLink + '/server/smpc/group/accounts')
 const GroupTxns = require(pathLink + '/server/smpc/group/txns')
 
 function GroupFn (socket, io) {

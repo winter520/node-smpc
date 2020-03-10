@@ -41,13 +41,28 @@ const PersonTxns = new Schema({
   to: {type: String},
   value: {type: Number},
   nonce: {type: Number},
+  gId: {type: String},
   coinType: {type: String},
   hash: {type: String},
   status: {type: Number, default: 0},
   timestamp: {type: Number},
   kId: {type: String},
   eNode: {type: String},
+  pubKey: {type: String},
 }, {collection: "PersonTxns"})
+
+const PersonAccounts = new Schema({
+  keyId: {type: String, unique: true},
+  key: {type: String},
+  kId: {type: String},
+  member: {type: Array, default: []},
+  nonce: {type: Number},
+  gId: {type: String},
+  timestamp: {type: Number},
+  status: {type: Number, default: 0},
+  mode: {type: String},
+  pubKey: {type: String},
+}, {collection: "PersonAccounts"})
 
 const NodeInfos = new Schema({
   url: {type: String, unique: true},
@@ -75,16 +90,18 @@ const VersionInfo = new Schema({
 }, {collection: "VersionInfo"})
 
 GroupTxns.index({timestamp: -1}, {background: 1})
-PersonTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
+PersonTxns.index({timestamp: -1}, {background: 1})
+PersonAccounts.index({timestamp: -1}, {background: 1})
 NodeInfos.index({sortId: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
 
 
 mongoose.model('GroupTxns', GroupTxns)
-mongoose.model('PersonTxns', PersonTxns)
 mongoose.model('GroupAccounts', GroupAccounts)
+mongoose.model('PersonTxns', PersonTxns)
+mongoose.model('PersonAccounts', PersonAccounts)
 mongoose.model('NodeInfos', NodeInfos)
 mongoose.model('UserInfo', UserInfo)
 mongoose.model('VersionInfo', VersionInfo)
@@ -124,8 +141,9 @@ mongoose.connection.on('disconnected', () => {
 
 module.exports = {
   GroupTxns: mongoose.model('GroupTxns'),
-  PersonTxns: mongoose.model('PersonTxns'),
   GroupAccounts: mongoose.model('GroupAccounts'),
+  PersonTxns: mongoose.model('PersonTxns'),
+  PersonAccounts:  mongoose.model('PersonAccounts'),
   NodeInfos: mongoose.model('NodeInfos'),
   UserInfo: mongoose.model('UserInfo'),
   VersionInfo: mongoose.model('VersionInfo'),

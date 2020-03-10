@@ -22,12 +22,14 @@ function PersonTxnsAdd (socket, type, req) {
     to: req.to ? req.to : '',
     value: req.value ? req.value : 0,
     nonce: req.nonce ? req.nonce : 0,
+    gId: req.gId ? req.gId : '',
     coinType: req.coinType ? req.coinType : 0,
     hash: req.hash ? req.hash : '',
     status: req.status ? req.status : 0,
     timestamp: dateNow,
     kId: req.kId ? req.kId : 0,
     eNode: req.eNode ? req.eNode : '',
+    pubKey: req.pubKey ? req.pubKey : '',
   })
   personTxns.save((err, res) => {
     if (err) {
@@ -40,24 +42,46 @@ function PersonTxnsAdd (socket, type, req) {
   })
 }
 
-function PersonTxnsEdit (socket, type, req) {
-  let params = {}
+function PersonTxnsEdit (params, updateParams) {
+  return new Promise((resolve, reject) => {
+    PersonTxns.updateOne(params, updateParams).exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+function changePersonTxnsStatus (socket, type, req) {
+  let params = {}, updateParams = {}
   let data = {
     msg: 'Error',
     info: ''
   }
   if (req) {
+    if (req.id || req.id === 0) {
+      params._id = req.id
+    }
+
     if (req.status || req.status === 0) {
-      params.status = req.status
+      updateParams['status'] = req.status
+    }
+    if (req.hash || req.hash === 0) {
+      updateParams['hash'] = req.hash
     }
   }
-  PersonTxns.updateOne({ kId: req.kId }, params).exec((err, res) => {
-    if (err) {
-      data.error = err.toString()
-    } else {
-      data.msg = 'Success'
-      data.info = res
-    }
+  logger.info('changePersonTxnsStatus')
+  logger.info(req)
+  logger.info(params)
+  logger.info(updateParams)
+  PersonTxnsEdit(params, updateParams).then(res => {
+    data.msg = 'Success'
+    data.info = res
+    socket.emit(type, data)
+  }).catch(err => {
+    data.error = err.toString()
     socket.emit(type, data)
   })
 }
@@ -133,8 +157,8 @@ function PersonTxnsFn (socket, io) {
   socket.on('PersonAddTxns', (req) => {
     PersonTxnsAdd(socket, 'PersonAddTxns', req, io)
   })
-  socket.on('PersonEditTxns', (req) => {
-    PersonTxnsEdit(socket, 'PersonEditTxns', req, io)
+  socket.on('changePersonTxnsStatus', (req) => {
+    changePersonTxnsStatus(socket, 'changePersonTxnsStatus', req, io)
   })
   socket.on('PersonFindTxns', (req) => {
     PersonTxnsFind(socket, 'PersonFindTxns', req, io)
