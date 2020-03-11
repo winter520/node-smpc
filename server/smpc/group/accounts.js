@@ -72,6 +72,9 @@ function GroupAccountsEdit (socket, type, req) {
     if (req.key || req.key === 0) {
       params.key = req.key
     }
+    if (req.keyId || req.keyId === 0) {
+      params.keyId = req.keyId
+    }
     if (req.kId || req.kId === 0) {
       params['member.kId'] = req.kId
     }

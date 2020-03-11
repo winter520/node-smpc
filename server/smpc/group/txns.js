@@ -74,6 +74,9 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
     if (req.key || req.key === 0) {
       params.key = req.key
     }
+    if (req.keyId || req.keyId === 0) {
+      params.keyId = req.keyId
+    }
     if (req.eNode) {
       params['member.eNode'] = req.eNode
     }
