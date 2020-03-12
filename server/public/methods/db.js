@@ -70,6 +70,12 @@ const NodeInfos = new Schema({
   sortId: {type: Number},
 }, {collection: "NodeInfos"})
 
+const NodeInfosDev = new Schema({
+  url: {type: String, unique: true},
+  name: {type: String},
+  sortId: {type: Number},
+}, {collection: "NodeInfosDev"})
+
 const UserInfo = new Schema({
   username: {type: String, unique: true},
   address: {type: String},
@@ -94,6 +100,7 @@ GroupAccounts.index({timestamp: -1}, {background: 1})
 PersonTxns.index({timestamp: -1}, {background: 1})
 PersonAccounts.index({timestamp: -1}, {background: 1})
 NodeInfos.index({sortId: -1}, {background: 1})
+NodeInfosDev.index({sortId: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
 
@@ -103,6 +110,7 @@ mongoose.model('GroupAccounts', GroupAccounts)
 mongoose.model('PersonTxns', PersonTxns)
 mongoose.model('PersonAccounts', PersonAccounts)
 mongoose.model('NodeInfos', NodeInfos)
+mongoose.model('NodeInfosDev', NodeInfosDev)
 mongoose.model('UserInfo', UserInfo)
 mongoose.model('VersionInfo', VersionInfo)
 
@@ -145,6 +153,7 @@ module.exports = {
   PersonTxns: mongoose.model('PersonTxns'),
   PersonAccounts:  mongoose.model('PersonAccounts'),
   NodeInfos: mongoose.model('NodeInfos'),
+  NodeInfosDev: mongoose.model('NodeInfosDev'),
   UserInfo: mongoose.model('UserInfo'),
   VersionInfo: mongoose.model('VersionInfo'),
 }
