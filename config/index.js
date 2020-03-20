@@ -57,6 +57,7 @@ let publicSet = {
 // publicSet.mongoDBurl = 'mongodb://139.196.26.212:27017/smpc',
 // publicSet.mongoDBurl = 'mongodb://smpc:Fusion123456@104.210.49.28:27017/smpc'
 // publicSet.mongoDBurl = 'mongodb://47.92.168.85:27017/smpc'
-publicSet.mongoDBurl = 'mongodb://47.56.150.104:27017/smpc'
+// publicSet.mongoDBurl = 'mongodb://47.56.150.104:27017/smpc'
+publicSet.mongoDBurl = 'mongodb://127.0.0.1:27017/smpc'
 
 module.exports = publicSet
