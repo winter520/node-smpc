@@ -18,6 +18,7 @@ const GroupTxns = new Schema({
   coinType: {type: String},
   hash: {type: String},
   status: {type: Number, default: 0},
+  mode: {type: String},
   timestamp: {type: Number},
   pubKey: {type: String},
 }, {collection: "GroupTxns"})
@@ -45,6 +46,7 @@ const PersonTxns = new Schema({
   coinType: {type: String},
   hash: {type: String},
   status: {type: Number, default: 0},
+  mode: {type: String},
   timestamp: {type: Number},
   kId: {type: String},
   eNode: {type: String},

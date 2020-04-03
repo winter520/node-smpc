@@ -31,6 +31,7 @@ function GroupTxnsAdd (socket, type, req) {
     coinType: req.coinType ? req.coinType : 0,
     hash: req.hash ? req.hash : '',
     status: req.status ? req.status : 0,
+    mode: req.mode ? req.mode : 0,
     timestamp: dateNow,
     pubKey: req.pubKey ? req.pubKey : '',
   }

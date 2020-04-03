@@ -29,6 +29,7 @@ function PersonTxnsAdd (socket, type, req) {
     timestamp: dateNow,
     kId: req.kId ? req.kId : 0,
     eNode: req.eNode ? req.eNode : '',
+    mode: req.mode ? req.mode : '',
     pubKey: req.pubKey ? req.pubKey : '',
   })
   personTxns.save((err, res) => {
