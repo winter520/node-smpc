@@ -70,12 +70,20 @@ const NodeInfos = new Schema({
   url: {type: String, unique: true},
   name: {type: String},
   sortId: {type: Number},
+  publisher: {type: String},
+  address: {type: String},
+  timestamp: {type: Number},
+  updatetime: {type: Number},
 }, {collection: "NodeInfos"})
 
 const NodeInfosDev = new Schema({
   url: {type: String, unique: true},
   name: {type: String},
   sortId: {type: Number},
+  publisher: {type: String},
+  address: {type: String},
+  timestamp: {type: Number},
+  updatetime: {type: Number},
 }, {collection: "NodeInfosDev"})
 
 const UserInfo = new Schema({
@@ -101,8 +109,8 @@ GroupTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
 PersonTxns.index({timestamp: -1}, {background: 1})
 PersonAccounts.index({timestamp: -1}, {background: 1})
-NodeInfos.index({sortId: -1}, {background: 1})
-NodeInfosDev.index({sortId: -1}, {background: 1})
+NodeInfos.index({sortId: -1, timestamp: -1}, {background: 1})
+NodeInfosDev.index({sortId: -1, timestamp: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
 
