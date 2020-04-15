@@ -9,10 +9,130 @@ const async = require('async')
 const UserInfo = mongoose.model('UserInfo')
 const encryption = require(pathLink + '/server/public/methods/encryption')
 
+const email = require(pathLink + '/config/email')
+const regExp = require(pathLink + '/config/RegExp')
+const send = require(pathLink + '/server/public/email/send')
+
+let emailObj = {}
+
+function EmailValidRegister (socket, type, req) {
+  let dateNow = Date.now()
+  let data = {
+    msg: 'Error',
+    info: ''
+  }
+  if (!req.email) {
+    data.error = 'Email is null!'
+    socket.emit(type, data)
+    return
+  }
+  if (emailObj[req.email] && emailObj[req.email].code) {
+    let time = dateNow - emailObj[req.email].timestamp
+    if (time < (1000 * 60)) {
+      data.error = '操作频繁，请稍后尝试！'
+      socket.emit(type, data)
+      return
+    }
+  }
+  async.waterfall([
+    (cb) => {
+      // UserInfo.find({email: req.email}).countDocuments((err, count) => {
+      //   if (err) {
+      //     cb(err)
+      //   } else {
+      //     if (count > 0) {
+      //       cb('Repeat')
+      //     } else {
+      //       cb(null, count)
+      //     }
+      //   }
+      // })
+      cb(null, 0)
+    },
+    (count, cb) => {
+      let code = $$.createSixNum()
+      const mail = {
+        // 发件人
+        from: 'SMPCWallet<' + email.auth.user + '>',
+        // from: email.auth.user,
+        // 主题
+        subject: '注册验证',
+        // 收件人
+        to: req.email,
+        // 邮件内容，HTML格式
+        html: '<h1>您好：</h1><p style="margin-top:50px">您本次的验证码是：<span style="font-size:22px;font-weight:bold;">' + code + '</span></p><p style="margin-top:50px">有效时间为10分钟</p><p style="margin-top:70px;color:#999;">来自：SMPCWallet项目组</p><p style="color:#999;">这是封自动发送邮件。请不要回复该邮件。</p>'//接收激活请求的链接
+      }
+      send(mail).then(res => {
+        if (res.msg === 'Error') {
+          // data.error = res.error
+          cb(res.error)
+        } else {
+          emailObj[req.email] = {
+            code: code,
+            timestamp: dateNow
+          }
+          setTimeout(() => {
+            delete emailObj[req.email]
+          // }, 1000 * 6)
+          }, 1000 * 60 * 10)
+          data.info = 'Send success'
+          cb(null, data)
+        }
+      })
+    }
+  ], (err, res) => {
+    if (err) {
+      data.error = error
+    } else {
+      data.msg = 'Success'
+    }
+    socket.emit(type, data)
+  })
+  // let code = $$.createSixNum()
+  // emailObj[req.email] = {
+  //   code: code,
+  //   timestamp: dateNow
+  // }
+  // const mail = {
+  //   // 发件人
+  //   from: 'SMPCWallet<' + email.auth.user + '>',
+  //   // from: email.auth.user,
+  //   // 主题
+  //   subject: '注册验证',
+  //   // 收件人
+  //   to: req.email,
+  //   // 邮件内容，HTML格式
+  //   html: '<h1>您好：</h1><p style="margin-top:50px">您本次的验证码是：<span style="font-size:22px;font-weight:bold;">' + code + '</span></p><p style="margin-top:50px">有效时间为10分钟</p><p style="margin-top:70px;color:#999;">来自：SMPCWallet项目组</p><p style="color:#999;">这是封自动发送邮件。请不要回复该邮件。</p>'//接收激活请求的链接
+  // }
+  // send(mail).then(res => {
+  //   if (res.msg === 'Error') {
+  //     data.error = res.error
+  //   } else {
+  //     data.msg = 'Success'
+  //     data.info = 'Send success'
+  //   }
+  //   setTimeout(() => {
+  //     delete emailObj[req.email]
+  //   // }, 1000 * 6)
+  //   }, 1000 * 60 * 10)
+  //   socket.emit(type, data)
+  // })
+}
+
 function UserInfoAdd (socket, type, req) {
   let data = {
     msg: 'Error',
     info: ''
+  }
+  if (!req.email || !regExp.email.test(req.email)) {
+    data.error = '邮箱格式错误'
+    socket.emit(type, data)
+    return
+  }
+  if (!req.code || !emailObj[req.email] || !emailObj[req.email].code || emailObj[req.email].code !== req.code) {
+    data.error = '验证码不匹配'
+    socket.emit(type, data)
+    return
   }
   let pwd = encryption(req.password)
   let userInfo = new UserInfo({
@@ -21,6 +141,7 @@ function UserInfoAdd (socket, type, req) {
     timestamp: Date.now(),
     password: pwd,
     ks: req.ks,
+    email: req.email
   })
   userInfo.save((err, res) => {
     if (err) {
@@ -138,6 +259,9 @@ function GetUserAccount (socket, type, req) {
 }
 
 function UserInfosFn (socket, io) {
+  socket.on('EmailValidRegister', (req) => {
+    EmailValidRegister(socket, 'EmailValidRegister', req, io)
+  })
   socket.on('UserInfoAdd', (req) => {
     UserInfoAdd(socket, 'UserInfoAdd', req, io)
   })

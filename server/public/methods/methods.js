@@ -96,6 +96,11 @@ function fixPkey (key) {
   return key
 }
 
+function createSixNum () {
+  let num = Math.ceil(Math.random() * 1000000)
+  return num.toString()
+}
+
 module.exports = {
   config: configData,
   fromTime,
@@ -105,5 +110,6 @@ module.exports = {
   smallToBigSort,
   bigToSmallSort,
   getBeforeDate,
-  fixPkey
+  fixPkey,
+  createSixNum
 }

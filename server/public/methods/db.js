@@ -92,6 +92,7 @@ const UserInfo = new Schema({
   timestamp: {type: Number},
   password: {type: String},
   ks: {type: String},
+  email: {type: String},
 }, {collection: "UserInfo"})
 
 const VersionInfo = new Schema({
