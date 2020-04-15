@@ -98,12 +98,18 @@ const VersionInfo = new Schema({
   name: {type: String},
   level: {type: Number},
   version: {type: String, unique: true},
-  updateInfo: {type: String},
   timestamp: {type: Number},
   winUrl: {type: String},
   macUrl: {type: String},
   linusUrl: {type: String},
 }, {collection: "VersionInfo"})
+
+const UserEnodes = new Schema({
+  enode: {type: String},
+  sign: {type: String},
+  unIP: {type: String},
+  updatetime: {type: Number},
+}, {collection: "UserEnodes"})
 
 GroupTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
@@ -113,6 +119,7 @@ NodeInfos.index({sortId: -1, timestamp: -1}, {background: 1})
 NodeInfosDev.index({sortId: -1, timestamp: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
+UserEnodes.index({updatetime: -1}, {background: 1})
 
 
 mongoose.model('GroupTxns', GroupTxns)
@@ -123,6 +130,7 @@ mongoose.model('NodeInfos', NodeInfos)
 mongoose.model('NodeInfosDev', NodeInfosDev)
 mongoose.model('UserInfo', UserInfo)
 mongoose.model('VersionInfo', VersionInfo)
+mongoose.model('UserEnodes', UserEnodes)
 
 
 mongoose.Promise = global.Promise
@@ -166,4 +174,5 @@ module.exports = {
   NodeInfosDev: mongoose.model('NodeInfosDev'),
   UserInfo: mongoose.model('UserInfo'),
   VersionInfo: mongoose.model('VersionInfo'),
+  UserEnodes: mongoose.model('UserEnodes'),
 }

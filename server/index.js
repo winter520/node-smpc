@@ -6,6 +6,7 @@ const PersonFn = require(pathLink + '/server/smpc/person/index')
 const GroupFn = require(pathLink + '/server/smpc/group/index')
 const NodeInfos = require(pathLink + '/server/smpc/node/index')
 const UserInfos = require(pathLink + '/server/smpc/user/index')
+const SocialFn = require(pathLink + '/server/smpc/social/index')
 
 function StartSocket (socket, io) {
   /**
@@ -24,6 +25,10 @@ function StartSocket (socket, io) {
    * 用户信息
    */
   UserInfos(socket, io)
+  /**
+   * 用户信息
+   */
+  SocialFn(socket, io)
 }
 
 module.exports = StartSocket

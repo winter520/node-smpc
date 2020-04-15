@@ -113,6 +113,30 @@ function GetUserIsRepeat (socket, type, req) {
   })
 }
 
+function GetUserAccount (socket, type, req) {
+  let data = { msg: 'Error', info: [] },
+      params = {}
+  let pwd = encryption(req.password)
+  if (req) {
+    if (req.username || req.username === 0) {
+      params.username = req.username
+    }
+    if (req.password || req.password === 0) {
+      let pwd = encryption(req.password)
+      params.password = pwd
+    }
+  }
+  UserInfo.findOne(params, {username: 1,ks: 1}).exec((err, results) => {
+    if (err) {
+      data.error = err.toString()
+    } else {
+      data.msg = 'Success'
+      data.info = results
+    }
+    socket.emit(type, data)
+  })
+}
+
 function UserInfosFn (socket, io) {
   socket.on('UserInfoAdd', (req) => {
     UserInfoAdd(socket, 'UserInfoAdd', req, io)
@@ -122,6 +146,9 @@ function UserInfosFn (socket, io) {
   })
   socket.on('GetUserIsRepeat', (req) => {
     GetUserIsRepeat(socket, 'GetUserIsRepeat', req, io)
+  })
+  socket.on('GetUserAccount', (req) => {
+    GetUserAccount(socket, 'GetUserAccount', req, io)
   })
 }
 
