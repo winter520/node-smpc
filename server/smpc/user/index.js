@@ -72,7 +72,9 @@ function EmailValidRegister (socket, type, req) {
             timestamp: dateNow
           }
           setTimeout(() => {
-            delete emailObj[req.email]
+            if (emailObj[req.email]) {
+              delete emailObj[req.email]
+            }
           // }, 1000 * 6)
           }, 1000 * 60 * 10)
           data.info = 'Send success'
@@ -82,7 +84,7 @@ function EmailValidRegister (socket, type, req) {
     }
   ], (err, res) => {
     if (err) {
-      data.error = error
+      data.error = err
     } else {
       data.msg = 'Success'
     }
@@ -124,15 +126,22 @@ function UserInfoAdd (socket, type, req) {
     msg: 'Error',
     info: ''
   }
-  if (!req.email || !regExp.email.test(req.email)) {
-    data.error = '邮箱格式错误'
+  if (!req.username || !regExp.username.test(req.username)) {
+    data.error = '用户名不合法'
     socket.emit(type, data)
     return
   }
-  if (!req.code || !emailObj[req.email] || !emailObj[req.email].code || emailObj[req.email].code !== req.code) {
-    data.error = '验证码不匹配'
-    socket.emit(type, data)
-    return
+  if (req.isOpenEmail) {
+    if (!req.email || !regExp.email.test(req.email)) {
+      data.error = '邮箱格式错误'
+      socket.emit(type, data)
+      return
+    }
+    if (!req.code || !emailObj[req.email] || !emailObj[req.email].code || emailObj[req.email].code !== req.code) {
+      data.error = '验证码不匹配'
+      socket.emit(type, data)
+      return
+    }
   }
   let pwd = encryption(req.password)
   let userInfo = new UserInfo({
@@ -141,7 +150,7 @@ function UserInfoAdd (socket, type, req) {
     timestamp: Date.now(),
     password: pwd,
     ks: req.ks,
-    email: req.email
+    email: req.email ? req.email : ''
   })
   userInfo.save((err, res) => {
     if (err) {
@@ -149,6 +158,9 @@ function UserInfoAdd (socket, type, req) {
     } else {
       data.msg = 'Success'
       data.info = res
+      if (req.isOpenEmail && req.email && emailObj[req.email]) {
+        delete emailObj[req.email]
+      }
     }
     socket.emit(type, data)
   })
