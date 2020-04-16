@@ -5,7 +5,9 @@ let host = {
 
 module.exports = {
   host: 'smtp.163.com', 
-  port: 25,
+  port: 465,
+  secureConnection: true,
+  secure:false,
   auth: {
     user: 'fusion15627@163.com', //刚才注册的邮箱账号
     pass: 'ISEZPUGXMMYDCPOS'  //邮箱的授权码，不是注册时的密码
