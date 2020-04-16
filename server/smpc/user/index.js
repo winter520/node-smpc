@@ -34,6 +34,7 @@ function EmailValidRegister (socket, type, req) {
       return
     }
   }
+  logger.info(req)
   async.waterfall([
     (cb) => {
       // UserInfo.find({email: req.email}).countDocuments((err, count) => {
@@ -62,7 +63,9 @@ function EmailValidRegister (socket, type, req) {
         // 邮件内容，HTML格式
         html: '<h1>您好：</h1><p style="margin-top:50px">您本次的验证码是：<span style="font-size:22px;font-weight:bold;">' + code + '</span></p><p style="margin-top:50px">有效时间为10分钟</p><p style="margin-top:70px;color:#999;">来自：SMPCWallet项目组</p><p style="color:#999;">这是封自动发送邮件。请不要回复该邮件。</p>'//接收激活请求的链接
       }
+      logger.info(mail)
       send(mail).then(res => {
+        logger.info(res)
         if (res.msg === 'Error') {
           // data.error = res.error
           cb(res.error)
