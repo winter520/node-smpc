@@ -91,6 +91,7 @@ function EmailValidRegister (socket, type, req) {
     } else {
       data.msg = 'Success'
     }
+    logger.info(data)
     socket.emit(type, data)
   })
   // let code = $$.createSixNum()
