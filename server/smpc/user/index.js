@@ -131,6 +131,11 @@ function UserInfoAdd (socket, type, req) {
     msg: 'Error',
     info: ''
   }
+  if (!req || !req.ks || !req.address) {
+    data.error = '注册失败'
+    socket.emit(type, data)
+    return
+  }
   if (!req.username || !regExp.username.test(req.username)) {
     data.error = '用户名不合法'
     socket.emit(type, data)
