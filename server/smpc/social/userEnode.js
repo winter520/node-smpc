@@ -45,7 +45,7 @@ function UserEnodeSearch (socket, type, req) {
       {sign: {$regex: req.searchVal, $options:"$i"}},
       {unIP: {$regex: req.searchVal, $options:"$i"}},
     ]
-  }, {unIP: 1, sign: 1}).exec((err, res) => {
+  }, {unIP: 1, sign: 1}).limit(30).exec((err, res) => {
     if (err) {
       data.error = err.toString()
     } else {
