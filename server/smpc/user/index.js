@@ -16,6 +16,7 @@ const send = require(pathLink + '/server/public/email/send')
 let emailObj = {}
 
 function EmailValidRegister (socket, type, req) {
+  const emailService = 'aliyun'
   let dateNow = Date.now()
   let data = {
     msg: 'Error',
@@ -54,7 +55,7 @@ function EmailValidRegister (socket, type, req) {
       let code = $$.createSixNum()
       const mail = {
         // 发件人
-        from: 'SMPCWallet<' + email.auth.user + '>',
+        from: 'SMPCWallet<' + email[emailService].auth.user + '>',
         // from: email.auth.user,
         // 主题
         subject: '注册验证',
@@ -64,7 +65,7 @@ function EmailValidRegister (socket, type, req) {
         html: '<h1>您好：</h1><p style="margin-top:50px">您本次的验证码是：<span style="font-size:22px;font-weight:bold;">' + code + '</span></p><p style="margin-top:50px">有效时间为60分钟</p><p style="margin-top:70px;color:#999;">来自：SMPCWallet项目组</p><p style="color:#999;">这是封自动发送邮件。请不要回复该邮件。</p>'//接收激活请求的链接
       }
       logger.info(mail)
-      send(mail).then(res => {
+      send(mail, emailService).then(res => {
         logger.info(res)
         if (res.msg === 'Error') {
           // data.error = res.error

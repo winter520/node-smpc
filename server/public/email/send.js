@@ -13,10 +13,12 @@ const email = require(pathLink + '/config/email')
 // }
 
 // 创建一个SMTP客户端对象
-const transporter = nodemailer.createTransport(email);
+// const transporter = nodemailer.createTransport(email);
 
-// 发送邮件
-module.exports = function (mail){
+function sendMail (mail, params) {
+  // console.log(email[params])
+  // 创建一个SMTP客户端对象
+  const transporter = nodemailer.createTransport(email[params]);
   return new Promise(resolve=>  {
     transporter.sendMail(mail, function(error, info){
       if(error) {
@@ -34,3 +36,23 @@ module.exports = function (mail){
     })
   })
 }
+module.exports = sendMail
+// 发送邮件
+// module.exports = function (mail){
+//   return new Promise(resolve=>  {
+//     transporter.sendMail(mail, function(error, info){
+//       if(error) {
+//         resolve({
+//           msg: 'Error',
+//           error: error
+//         })
+//       } else {
+//         resolve({
+//           msg: 'Success',
+//           error: info.response
+//         })
+//       }
+//       // console.log('mail sent:', info.response);
+//     })
+//   })
+// }
