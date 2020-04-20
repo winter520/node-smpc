@@ -9,51 +9,59 @@ const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 
 function getEnode(url) {
-  return Promise.race([
-    () => {
-      return new Promise(resolve => {
-        let data = { enode: '', state: 0 }
-        web3.setProvider(url)
-        web3.dcrm.getEnode().then(res => {
-          let cbData = res
-          cbData = JSON.parse(cbData)
-          // console.log(cbData)
-          if (cbData.Status === "Success") {
-            data = { state: 1, enode: cbData.Data.Enode }
-          } else {
-            data = { state: 0, enode: '' }
-          }
-          // logger.info(data)
-          resolve(data)
-        }).catch(err => {
-          logger.error(err)
-          data = { state: 0, enode: '' }
-          resolve(data)
-        })
-      })
-    },
-    () => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          let data = { state: 0, enode: '' }
-          resolve(data)
-        }, 1000 * 30)
-      })
-    }
-  ])
+  return new Promise(resolve => {
+    let data = { enode: '', state: 0 }
+    web3.setProvider(url)
+    web3.dcrm.getEnode().then(res => {
+      let cbData = res
+      cbData = JSON.parse(cbData)
+      // console.log(cbData)
+      if (cbData.Status === "Success") {
+        data = { state: 1, enode: cbData.Data.Enode }
+      } else {
+        data = { state: 0, enode: '' }
+      }
+      // logger.info('data')
+      logger.info(data)
+      resolve(data)
+    }).catch(err => {
+      logger.error(err)
+      data = { state: 0, enode: '' }
+      resolve(data)
+    })
+  })
+}
+function getEnode2(url) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      let data = { state: 0, enode: '' }
+      logger.info('data1')
+      resolve(data)
+    // }, 1000 * 1)
+    }, 1000 * 30)
+  })
+}
+
+function getEnodeResult(url) {
+  return new Promise(resolve => {
+    Promise.race([getEnode(url), getEnode2(url)]).then(res => {
+      // console.log(res.toString())
+      resolve(res)
+    })
+  })
 }
 
 function getAndSetState (nodeArr) {
   async.eachSeries(nodeArr, (nodeObj, callback) => {
     async.waterfall([
       (cb) => {
-        logger.info(nodeObj)
-        getEnode(nodeObj.url).then(res => {
+        logger.info(nodeObj.url)
+        getEnodeResult(nodeObj.url).then(res => {
           cb(null, res)
         })
       },
       (data, cb) => {
-        logger.info(data)
+        // logger.info(data)
         let updateParams = {}
         if (data.state) {
           updateParams = {
