@@ -5,7 +5,7 @@ require($$.config.link.db)
 const logger = require($$.config.link.logger).getLogger($$.config.log.client + 'NodeInfos')
 const mongoose = require('mongoose')
 const async = require('async')
-
+const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 const NodeInfosDev = mongoose.model('NodeInfosDev')
 
@@ -17,6 +17,26 @@ function NodeAdd (socket, type, req) {
   let dateNow = Date.now()
   async.waterfall([
     (cb) => {
+      let dataObj = {
+        enode: '',
+        state: 0
+      }
+      web3.setProvider(nodeObj.url)
+      web3.dcrm.getEnode().then(res => {
+        let cbData = res
+        cbData = JSON.parse(cbData)
+        // console.log(cbData)
+        if (cbData.Status === "Success") {
+          dataObj = { state: 1, enode: cbData.Data.Enode }
+          cb(null, dataObj)
+        } else {
+          cb('Add error!')
+        }
+      }).catch(err => {
+        cb(err)
+      })
+    },
+    (dataObj, cb) => {
       NodeInfos.find({
         $or: [
           {url: req.url},
@@ -29,12 +49,12 @@ function NodeAdd (socket, type, req) {
           if (res.length > 0) {
             cb('Repeat')
           } else {
-            cb(null, res)
+            cb(null, dataObj)
           }
         }
       })
     },
-    (res, cb) => {
+    (dataObj, cb) => {
       let nodeInfos = new NodeInfos({
         url: req.url ? req.url : '',
         name: req.name ? req.name : '',
@@ -43,6 +63,8 @@ function NodeAdd (socket, type, req) {
         address: req.address ? req.address : '',
         timestamp: dateNow,
         updatetime: dateNow,
+        state: 1,
+        enode: dataObj.enode
       })
       nodeInfos.save((err, res) => {
         if (err) {
@@ -133,7 +155,7 @@ function NodeEdit (socket, type, req) {
 
 function getNodeInfos (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfos.find({}, {url: 1, name: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find({}, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()

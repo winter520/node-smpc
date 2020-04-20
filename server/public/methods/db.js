@@ -74,6 +74,8 @@ const NodeInfos = new Schema({
   address: {type: String},
   timestamp: {type: Number},
   updatetime: {type: Number},
+  status: {type: Number, default: 1},
+  enode: {type: String},
 }, {collection: "NodeInfos"})
 
 const NodeInfosDev = new Schema({
@@ -84,6 +86,8 @@ const NodeInfosDev = new Schema({
   address: {type: String},
   timestamp: {type: Number},
   updatetime: {type: Number},
+  status: {type: Number, default: 1},
+  enode: {type: String},
 }, {collection: "NodeInfosDev"})
 
 const UserInfo = new Schema({

@@ -41,6 +41,11 @@ io.attach(httpServer)
 // const uploadFile = require(pathLink + '/server/uploadFile/index')
 // app.use('/uploadFile', uploadFile)
 
+/**
+ * 更新节点状态
+ */
+const nodeState = require(pathLink + '/server/smpc/node/nodeState')
+nodeState()
 
 /**
  * socket

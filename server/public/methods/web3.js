@@ -3,131 +3,161 @@ const pathLink = path
 
 const Web3 = require('web3')
 // const $$ = require('./methods')
-const configData = require(pathLink + '/static/js/config')
-const logger = require(pathLink + '/server/public/methods/log4js').getLogger('Web3')
-let web3
-try {
-  // web3 = new Web3(new Web3.providers.HttpProvider('https://10.192.32.92'))
-  web3 = new Web3(new Web3.providers.HttpProvider(configData.serverRPC))
-} catch (error) {
-  web3 = new Web3()
-  logger.error(error)
-}
+// const configData = require(pathLink + '/static/js/config')
+// const logger = require(pathLink + '/server/public/methods/log4js').getLogger('Web3')
+let web3 = new Web3()
+
 // console.log(web3)
-web3._extend({
-  property: 'lilo',
+web3.extend({
+  property: 'dcrm',
   methods: [
-    new web3._extend.Method({
-      name: 'dcrmReqAddr',
-      call: 'lilo_dcrmReqAddr',
-      params: 2,
-      inputFormatter: [null, null],
+    {
+      name: 'reqDcrmAddr',
+      call: 'dcrm_reqDcrmAddr',
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'dcrmConfirmAddr',
-      getter: 'lilo_dcrmConfirmAddr',
-      inputFormatter: [null, null],
+    },
+    {
+      name: 'acceptLockOut',
+      call: 'dcrm_acceptLockOut',
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'dcrmGetAddr',
-      call: 'lilo_dcrmGetAddr',
-      params: 2,
-      inputFormatter: [null, null],
+    },
+    {
+      name: 'lockOut',
+      call: 'dcrm_lockOut',
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'dcrmLockin',
-      call: 'lilo_dcrmLockin',
+    },
+    {
+      name: 'getCurNodeLockOutInfo',
+      call: 'dcrm_getCurNodeLockOutInfo',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'getBalance',
+      call: 'dcrm_getBalance',
       params: 3,
       inputFormatter: [null, null, null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'dcrmGetBalance',
-      call: 'lilo_dcrmGetBalance',
-      params: 2,
-      inputFormatter: [null, null],
+    },
+    {
+      name: 'getLockOutNonce',
+      call: 'dcrm_getLockOutNonce',
+      params: 3,
+      inputFormatter: [null, null, null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'dcrmCoinStatus',
-      call: 'lilo_dcrmCoinStatus',
+    },
+    {
+      name: 'getEnode',
+      call: 'dcrm_getEnode',
       params: 0,
-      inputFormatter: null,
+      inputFormatter: [],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'xproOrderCreate',
-      call: 'lilo_xproOrderCreate',
-      params: 6,
-      inputFormatter: [null, null, null, null, null, null],
-      outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'xproOrderStatus',
-      call: 'lilo_xproOrderStatus',
+    },
+    {
+      name: 'getSDKGroupPerson',
+      call: 'dcrm_getSDKGroupPerson',
       params: 1,
       inputFormatter: [null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'xproOrderDealedInfo',
-      call: 'lilo_xproOrderDealedInfo',
+    },
+    {
+      name: 'getEnodeStatus',
+      call: 'dcrm_getEnodeStatus',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'createSDKGroup',
+      call: 'dcrm_createSDKGroup',
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'getPairList',
-      call: 'lilo_getPairList',
-      params: 1,
-      inputFormatter: [null],
-      outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'GetTransactionCountByPoolType',
-      call: 'lilo_GetTransactionCountByPoolType',
+    },
+    {
+      name: 'setGroupNodeStatus',
+      call: 'dcrm_setGroupNodeStatus',
       params: 3,
       inputFormatter: [null, null, null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'xproAddNewTrade',
-      call: 'lilo_xproAddNewTrade',
+    },
+    {
+      name: 'getGroupNodeStatus',
+      call: 'dcrm_getGroupNodeStatus',
       params: 1,
       inputFormatter: [null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'xproOrderCancel',
-      call: 'lilo_xproOrderCancel',
+    },
+    {
+      name: 'getSDKGroup',
+      call: 'dcrm_getSDKGroup',
       params: 1,
       inputFormatter: [null],
       outputFormatter: null
-    }),
-  ]
-})
-
-
-web3._extend({
-  property: 'fsn',
-  methods: [
-    new web3._extend.Method({
-      name: 'getAddressByNotation',
-      call: 'fsn_getAddressByNotation',
+    },
+    {
+      name: 'getGroupByID',
+      call: 'dcrm_getGroupByID',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'getAccounts',
+      call: 'dcrm_getAccounts',
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: null
-    }),
-    new web3._extend.Method({
-      name: 'fsnGetBalance',
-      call: 'fsn_getBalance',
-      params: 3,
-      inputFormatter: [null, null, null],
+    },
+    {
+      name: 'getAccountsBalance',
+      call: 'dcrm_getAccountsBalance',
+      params: 2,
+      inputFormatter: [null, null],
       outputFormatter: null
-    }),
+    },
+    {
+      name: 'getCurNodeReqAddrInfo',
+      call: 'dcrm_getCurNodeReqAddrInfo',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'getReqAddrStatus',
+      call: 'dcrm_getReqAddrStatus',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'acceptReqAddr',
+      call: 'dcrm_acceptReqAddr',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'getReqAddrNonce',
+      call: 'dcrm_getReqAddrNonce',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    },
+    {
+      name: 'getLockOutStatus',
+      call: 'dcrm_getLockOutStatus',
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: null
+    }
   ]
 })
 
