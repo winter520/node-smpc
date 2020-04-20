@@ -9,7 +9,7 @@ const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 
 function getEnode(url) {
-  Promise.race([
+  return Promise.race([
     () => {
       return new Promise(resolve => {
         let data = { enode: '', state: 0 }
