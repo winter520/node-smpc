@@ -19,7 +19,7 @@ function NodeAdd (socket, type, req) {
     (cb) => {
       let dataObj = {
         enode: '',
-        state: 0
+        status: 0
       }
       web3.setProvider(nodeObj.url)
       web3.dcrm.getEnode().then(res => {
@@ -27,7 +27,7 @@ function NodeAdd (socket, type, req) {
         cbData = JSON.parse(cbData)
         // console.log(cbData)
         if (cbData.Status === "Success") {
-          dataObj = { state: 1, enode: cbData.Data.Enode }
+          dataObj = { status: 1, enode: cbData.Data.Enode }
           cb(null, dataObj)
         } else {
           cb('Add error!')
@@ -63,7 +63,7 @@ function NodeAdd (socket, type, req) {
         address: req.address ? req.address : '',
         timestamp: dateNow,
         updatetime: dateNow,
-        state: 1,
+        status: 1,
         enode: dataObj.enode
       })
       nodeInfos.save((err, res) => {
@@ -155,7 +155,7 @@ function NodeEdit (socket, type, req) {
 
 function getNodeInfos (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfos.find({}, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find({}, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
@@ -179,7 +179,7 @@ function getUserNodeInfos (socket, type, req) {
       params.address = req.address
     }
   }
-  NodeInfos.find(params, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find(params, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
@@ -194,7 +194,7 @@ function getUserNodeInfos (socket, type, req) {
 
 function getNodeInfosDev (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfosDev.find({}, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfosDev.find({}, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
