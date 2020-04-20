@@ -2,7 +2,7 @@ const path = require('path').resolve('.')
 const pathLink = path
 const $$ = require(pathLink + '/server/public/methods/methods')
 require($$.config.link.db)
-const logger = require($$.config.link.logger).getLogger($$.config.log.client + 'NodeInfos')
+const logger = require($$.config.link.logger).getLogger($$.config.log.client + 'nodeState')
 const mongoose = require('mongoose')
 const async = require('async')
 const web3 = require(pathLink + '/server/public/methods/web3.js')
@@ -16,6 +16,7 @@ function getAndSetState (nodeArr) {
           enode: '',
           state: 0
         }
+        logger.info(nodeObj.url)
         web3.setProvider(nodeObj.url)
         web3.dcrm.getEnode().then(res => {
           let cbData = res
@@ -29,12 +30,13 @@ function getAndSetState (nodeArr) {
           // logger.info(data)
           cb(null, data)
         }).catch(err => {
-          logger.info(err)
+          logger.error(err)
           data = { state: 0, enode: '' }
           cb(null, data)
         })
       },
       (data, cb) => {
+        logger.info(data)
         let updateParams = {}
         if (data.state) {
           updateParams = {
