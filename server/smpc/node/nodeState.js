@@ -8,16 +8,12 @@ const async = require('async')
 const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 
-function getAndSetState (nodeArr) {
-  async.eachSeries(nodeArr, (nodeObj, callback) => {
-    async.waterfall([
-      (cb) => {
-        let data = {
-          enode: '',
-          state: 0
-        }
-        logger.info(nodeObj)
-        web3.setProvider(nodeObj.url)
+function getEnode(url) {
+  Promise.race([
+    () => {
+      return new Promise(resolve => {
+        let data = { enode: '', state: 0 }
+        web3.setProvider(url)
         web3.dcrm.getEnode().then(res => {
           let cbData = res
           cbData = JSON.parse(cbData)
@@ -28,11 +24,32 @@ function getAndSetState (nodeArr) {
             data = { state: 0, enode: '' }
           }
           // logger.info(data)
-          cb(null, data)
+          resolve(data)
         }).catch(err => {
           logger.error(err)
           data = { state: 0, enode: '' }
-          cb(null, data)
+          resolve(data)
+        })
+      })
+    },
+    () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          let data = { state: 0, enode: '' }
+          resolve(data)
+        }, 1000 * 30)
+      })
+    }
+  ])
+}
+
+function getAndSetState (nodeArr) {
+  async.eachSeries(nodeArr, (nodeObj, callback) => {
+    async.waterfall([
+      (cb) => {
+        logger.info(nodeObj)
+        getEnode(nodeObj.url).then(res => {
+          cb(null, res)
         })
       },
       (data, cb) => {
