@@ -97,13 +97,10 @@ function fixPkey (key) {
 }
 
 function createSixNum () {
-  let n1 = Math.floor(Math.random() * 10),
-      n2 = Math.floor(Math.random() * 10),
-      n3 = Math.floor(Math.random() * 10),
-      n4 = Math.floor(Math.random() * 10),
-      n5 = Math.floor(Math.random() * 10),
-      n6 = Math.floor(Math.random() * 10)
-  let num = '' + n1 + n2 + n3 + n4 + n5 + n6
+  let num = ''
+  for (let i = 0; i < 6; i++) {
+    num += Math.floor(Math.random() * 10)
+  }
   return num
 }
 
