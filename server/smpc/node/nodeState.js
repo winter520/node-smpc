@@ -35,7 +35,7 @@ function getEnode2(url) {
   return new Promise(resolve => {
     setTimeout(() => {
       let data = { state: 0, enode: '' }
-      logger.info('data1')
+      logger.info(url)
       resolve(data)
     // }, 1000 * 1)
     }, 1000 * 30)

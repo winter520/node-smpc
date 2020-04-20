@@ -179,7 +179,7 @@ function getUserNodeInfos (socket, type, req) {
       params.address = req.address
     }
   }
-  NodeInfos.find(params, {url: 1, name: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find(params, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
@@ -194,7 +194,7 @@ function getUserNodeInfos (socket, type, req) {
 
 function getNodeInfosDev (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfosDev.find({}, {url: 1, name: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfosDev.find({}, {url: 1, name: 1, state: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
