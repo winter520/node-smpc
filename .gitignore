@@ -3,8 +3,6 @@
 *.log
 logs/info-.2020-01-13.log
 logs/*
-config/index.js
-
 node_modules/
 config/email.js
-
+config/index.js
