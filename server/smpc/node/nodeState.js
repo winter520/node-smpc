@@ -16,7 +16,7 @@ function getAndSetState (nodeArr) {
           enode: '',
           state: 0
         }
-        logger.info(nodeObj.url)
+        logger.info(nodeObj)
         web3.setProvider(nodeObj.url)
         web3.dcrm.getEnode().then(res => {
           let cbData = res
@@ -75,7 +75,8 @@ function getAllNode () {
     if (err) {
       logger.info(err)
     } else {
-      // logger.info(res)
+      logger.info(res)
+      logger.info(res.length)
       getAndSetState(res)
     }
   })
