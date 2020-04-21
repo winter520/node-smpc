@@ -112,9 +112,21 @@ const VersionInfo = new Schema({
 const UserEnodes = new Schema({
   enode: {type: String},
   sign: {type: String},
+  address: {type: String},
   unIP: {type: String},
+  ip: {type: String},
   updatetime: {type: Number},
+  friendsArr: {type: Array, default: []},
 }, {collection: "UserEnodes"})
+
+// const FriendsSys = new Schema({
+//   username: {type: String},
+//   address: {type: String},
+//   // signAll: {type: String},
+//   unIP: {type: String},
+//   // outChain: {type: ObjectId, ref: 'UserEnodes'},
+//   timestamp: {type: Number},
+// }, {collection: "FriendsSys"})
 
 GroupTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
@@ -125,6 +137,7 @@ NodeInfosDev.index({sortId: -1, timestamp: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
 UserEnodes.index({updatetime: -1}, {background: 1})
+// FriendsSys.index({timestamp: -1}, {background: 1})
 
 
 mongoose.model('GroupTxns', GroupTxns)
@@ -136,6 +149,7 @@ mongoose.model('NodeInfosDev', NodeInfosDev)
 mongoose.model('UserInfo', UserInfo)
 mongoose.model('VersionInfo', VersionInfo)
 mongoose.model('UserEnodes', UserEnodes)
+// mongoose.model('FriendsSys', FriendsSys)
 
 
 mongoose.Promise = global.Promise
@@ -180,4 +194,5 @@ module.exports = {
   UserInfo: mongoose.model('UserInfo'),
   VersionInfo: mongoose.model('VersionInfo'),
   UserEnodes: mongoose.model('UserEnodes'),
+  // FriendsSys: mongoose.model('FriendsSys'),
 }

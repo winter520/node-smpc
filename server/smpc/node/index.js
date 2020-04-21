@@ -112,6 +112,26 @@ function NodeEdit (socket, type, req) {
   let dateNow = Date.now()
   async.waterfall([
     (cb) => {
+      let dataObj = {
+        enode: '',
+        status: 0
+      }
+      web3.setProvider(nodeObj.url)
+      web3.dcrm.getEnode().then(res => {
+        let cbData = res
+        cbData = JSON.parse(cbData)
+        // console.log(cbData)
+        if (cbData.Status === "Success") {
+          dataObj = { status: 1, enode: cbData.Data.Enode }
+          cb(null, dataObj)
+        } else {
+          cb('Add error!')
+        }
+      }).catch(err => {
+        cb(err)
+      })
+    },
+    (dataObj, cb) => {
       NodeInfos.find({
         publisher: {$ne: req.publisher},
         $or: [
@@ -125,13 +145,13 @@ function NodeEdit (socket, type, req) {
           if (res.length > 0) {
             cb('Repeat')
           } else {
-            cb(null, res)
+            cb(null, dataObj)
           }
         }
       })
     },
-    (res, cb) => {
-      NodeInfos.updateOne({_id: req.id}, {$set: {name: req.name, url: req.url, updatetime: dateNow}}).exec((err, res) => {
+    (dataObj, cb) => {
+      NodeInfos.updateOne({_id: req.id}, {$set: {name: req.name, url: req.url, updatetime: dateNow, enode: dataObj.enode}}).exec((err, res) => {
       // nodeInfos.save((err, res) => {
         if (err) {
           cb(err)
