@@ -24,7 +24,9 @@ function NodeAdd (socket, type, req) {
       web3.setProvider(req.url)
       web3.dcrm.getEnode().then(res => {
         let cbData = res
-        cbData = JSON.parse(cbData)
+        if (typeof res === 'string') {
+          cbData = JSON.parse(cbData)
+        }
         // console.log(cbData)
         if (cbData.Status === "Success") {
           dataObj = { status: 1, enode: cbData.Data.Enode }
@@ -119,7 +121,9 @@ function NodeEdit (socket, type, req) {
       web3.setProvider(req.url)
       web3.dcrm.getEnode().then(res => {
         let cbData = res
-        cbData = JSON.parse(cbData)
+        if (typeof res === 'string') {
+          cbData = JSON.parse(cbData)
+        }
         // console.log(cbData)
         if (cbData.Status === "Success") {
           dataObj = { status: 1, enode: cbData.Data.Enode }
@@ -151,7 +155,7 @@ function NodeEdit (socket, type, req) {
       })
     },
     (dataObj, cb) => {
-      NodeInfos.updateOne({_id: req.id}, {$set: {name: req.name, url: req.url, updatetime: dateNow, enode: dataObj.enode}}).exec((err, res) => {
+      NodeInfos.updateOne({_id: req.id}, {$set: {name: req.name, url: req.url, updatetime: dateNow, enode: dataObj.enode, status: 1,}}).exec((err, res) => {
       // nodeInfos.save((err, res) => {
         if (err) {
           cb(err)

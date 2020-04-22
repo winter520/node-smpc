@@ -14,7 +14,9 @@ function getEnode(url) {
     web3.setProvider(url)
     web3.dcrm.getEnode().then(res => {
       let cbData = res
-      cbData = JSON.parse(cbData)
+      if (typeof res === 'string') {
+        cbData = JSON.parse(cbData)
+      }
       // console.log(cbData)
       if (cbData.Status === "Success") {
         data = { status: 1, enode: cbData.Data.Enode }
