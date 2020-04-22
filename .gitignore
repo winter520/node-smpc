@@ -6,3 +6,4 @@ logs/*
 node_modules/
 config/email.js
 config/index.js
+test.js
