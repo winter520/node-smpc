@@ -21,7 +21,7 @@ function NodeAdd (socket, type, req) {
         enode: '',
         status: 0
       }
-      web3.setProvider(nodeObj.url)
+      web3.setProvider(req.url)
       web3.dcrm.getEnode().then(res => {
         let cbData = res
         cbData = JSON.parse(cbData)
@@ -116,7 +116,7 @@ function NodeEdit (socket, type, req) {
         enode: '',
         status: 0
       }
-      web3.setProvider(nodeObj.url)
+      web3.setProvider(req.url)
       web3.dcrm.getEnode().then(res => {
         let cbData = res
         cbData = JSON.parse(cbData)
