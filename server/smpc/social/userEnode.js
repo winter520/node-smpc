@@ -42,7 +42,7 @@ function UserEnodeSearch (socket, type, req) {
     info: ''
   }
   // UserEnodes.find({ unIP: req.searchVal}, {unIP: 1, sign: 1, enode: 1, address: 1}).limit(30).exec((err, res) => {
-  UserEnodes.find({ unIP: req.searchVal}).limit(30).exec((err, res) => {
+  UserEnodes.find({ unIP: {$regex: eval("/^" + req.searchVal +"/")}}).limit(30).exec((err, res) => {
     if (err) {
       data.error = err.toString()
     } else {
