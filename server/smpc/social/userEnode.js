@@ -6,6 +6,7 @@ const logger = require($$.config.link.logger).getLogger($$.config.log.client + '
 const mongoose = require('mongoose')
 const async = require('async')
 
+// const regExp = require(pathLink + '/config/RegExp')
 const UserEnodes = mongoose.model('UserEnodes')
 
 function UserEnodeAdd (socket, type, req) {
@@ -41,23 +42,30 @@ function UserEnodeSearch (socket, type, req) {
     msg: 'Error',
     info: ''
   }
-  let query = { unIP: req.searchVal}
-  if(req.searchVal.indexOf('@') < 0) {
-    query = { unIP: {$regex: eval("/^" + req.searchVal +"@@*/i")}}
-  } else {
-    if (req.searchVal.indexOf('/') > 0) {
-      req.searchVal = req.searchVal.replace(/\//g, '\\/')
-    }
-    if (req.searchVal.indexOf('.') > 0) {
-      req.searchVal = req.searchVal.replace(/\./g, '\\.')
-    }
-    if ((req.searchVal.indexOf('@') + 1) === req.searchVal.toString().length) {
-      query = { unIP: {$regex: eval("/^" + req.searchVal +"@*/i")}}
-    } else {
-      query = { unIP: {$regex: eval("/^" + req.searchVal +"*/i")}}
-    }
+  let reg = /[`~!#$%^&*()\-+=<>?"{}|,.;'\\[\]·~！#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/im
+  // console.log(reg.test(req.searchVal))
+  if (reg.test(req.searchVal)) {
+    data.msg = 'Success'
+    data.info = []
+    socket.emit(type, data)
+    return
   }
-  // console.log(query)
+  if (req.searchVal.indexOf('/') >= 0) {
+    req.searchVal = req.searchVal.replace(/\//g, '\\/')
+  }
+  if (req.searchVal.indexOf('.') >= 0) {
+    req.searchVal = req.searchVal.replace(/\./g, '\\.')
+  }
+  let query = { unIP: req.searchVal}
+  console.log(query)
+  if(req.searchVal.indexOf('@') < 0) {
+    query = { unIP: {$regex: eval("/^" + req.searchVal +"\@@*/i")}}
+  } else if ((req.searchVal.indexOf('@') + 1) === req.searchVal.toString().length) {
+    query = { unIP: {$regex: eval("/^" + req.searchVal +"@*/i")}}
+  } else {
+    query = { unIP: {$regex: eval("/^" + req.searchVal +"/i")}}
+  }
+  console.log(query)
   // UserEnodes.find({ unIP: req.searchVal}, {unIP: 1, sign: 1, enode: 1, address: 1}).limit(30).exec((err, res) => {
   UserEnodes.find(query).limit(30).exec((err, res) => {
     if (err) {
