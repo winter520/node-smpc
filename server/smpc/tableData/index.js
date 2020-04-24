@@ -1,14 +1,14 @@
 const path = require('path').resolve('.')
 const pathLink = path
 
-const UserInfos = require(pathLink + '/server/smpc/node/nodeInfo')
+const NodeData = require(pathLink + '/server/smpc/tableData/nodeData')
 // const FriendSysFn = require(pathLink + '/server/smpc/social/friends')
 
-function NodeInfosFn (socket, io) {
+function TableDataFn (socket, io) {
   /**
    * 用户Enode
    */
-  UserInfos(socket, io)
+  NodeData(socket, io)
 }
 
-module.exports = NodeInfosFn
+module.exports = TableDataFn
