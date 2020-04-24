@@ -9,6 +9,8 @@ const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 const NodeInfosDev = mongoose.model('NodeInfosDev')
 
+let publicSort = {'sortId': 1, 'timestamp': 1}
+
 function NodeAdd (socket, type, req) {
   let data = {
     msg: 'Error',
@@ -44,7 +46,7 @@ function NodeAdd (socket, type, req) {
           {url: req.url},
           {name: req.name},
         ]
-      }).sort({'sortId': 1, 'timestamp': -1}).exec((err, res) => {
+      }).sort(publicSort).exec((err, res) => {
         if (err) {
           cb(err)
         } else {
@@ -142,7 +144,7 @@ function NodeEdit (socket, type, req) {
           {url: req.url},
           {name: req.name},
         ]
-      }).sort({'sortId': 1, 'timestamp': -1}).exec((err, res) => {
+      }).sort(publicSort).exec((err, res) => {
         if (err) {
           cb(err)
         } else {
@@ -179,7 +181,7 @@ function NodeEdit (socket, type, req) {
 
 function getNodeInfos (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfos.find({}, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find({}, {url: 1, name: 1, status: 1}).sort(publicSort).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
@@ -203,7 +205,7 @@ function getUserNodeInfos (socket, type, req) {
       params.address = req.address
     }
   }
-  NodeInfos.find(params, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfos.find(params, {url: 1, name: 1, status: 1}).sort(publicSort).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
@@ -218,7 +220,7 @@ function getUserNodeInfos (socket, type, req) {
 
 function getNodeInfosDev (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfosDev.find({}, {url: 1, name: 1, status: 1}).sort({'sortId': -1, 'timestamp': -1}).exec((err, res) => {
+  NodeInfosDev.find({}, {url: 1, name: 1, status: 1}).sort(publicSort).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
