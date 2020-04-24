@@ -41,8 +41,25 @@ function UserEnodeSearch (socket, type, req) {
     msg: 'Error',
     info: ''
   }
+  let query = { unIP: req.searchVal}
+  if(req.searchVal.indexOf('@') < 0) {
+    query = { unIP: {$regex: eval("/^" + req.searchVal +"@@*/i")}}
+  } else {
+    if (req.searchVal.indexOf('/') > 0) {
+      req.searchVal = req.searchVal.replace(/\//g, '\\/')
+    }
+    if (req.searchVal.indexOf('.') > 0) {
+      req.searchVal = req.searchVal.replace(/\./g, '\\.')
+    }
+    if ((req.searchVal.indexOf('@') + 1) === req.searchVal.toString().length) {
+      query = { unIP: {$regex: eval("/^" + req.searchVal +"@*/i")}}
+    } else {
+      query = { unIP: {$regex: eval("/^" + req.searchVal +"*/i")}}
+    }
+  }
+  // console.log(query)
   // UserEnodes.find({ unIP: req.searchVal}, {unIP: 1, sign: 1, enode: 1, address: 1}).limit(30).exec((err, res) => {
-  UserEnodes.find({ unIP: {$regex: eval("/^" + req.searchVal +"/")}}).limit(30).exec((err, res) => {
+  UserEnodes.find(query).limit(30).exec((err, res) => {
     if (err) {
       data.error = err.toString()
     } else {
