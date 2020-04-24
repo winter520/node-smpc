@@ -9,7 +9,7 @@ const web3 = require(pathLink + '/server/public/methods/web3.js')
 const NodeInfos = mongoose.model('NodeInfos')
 const NodeInfosDev = mongoose.model('NodeInfosDev')
 
-let publicSort = {'sortId': 1, 'timestamp': 1}
+let publicSort = {'sortId': -1, 'timestamp': 1}
 
 function NodeAdd (socket, type, req) {
   let data = {
