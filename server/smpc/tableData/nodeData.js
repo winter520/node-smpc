@@ -13,6 +13,7 @@ const PersonTxns = mongoose.model('PersonTxns')
 const GroupAccounts = mongoose.model('GroupAccounts')
 const GroupTxns = mongoose.model('GroupTxns')
 const UserEnodes = mongoose.model('UserEnodes')
+const UserInfo = mongoose.model('UserInfo')
 
 let nodeObj = {
   nodeList: [],
@@ -81,7 +82,7 @@ function getAllInfo () {
       })
     },
     (data, cb) => {
-      UserEnodes.find().countDocuments((err, count) => {
+      UserInfo.find().countDocuments((err, count) => {
         if (err) {
           nodeObj.UC = 0
           logger.error(err.toString())
