@@ -141,12 +141,16 @@ function GroupTxnsFind (socket, type, req) {
 		pageSize: req && req.pageSize ? req.pageSize : 50,
 		skip: 0
 	}
-  _params.skip = req && req.pageNum ? (Number(req.pageNum - 1) * Number(_params.pageSize)) : 0
+  _params.skip = req && req.pageNum ? ((Number(req.pageNum) - 1) * Number(_params.pageSize)) : 0
 
   let data = { msg: 'Error', info: [] },
       params = {}
 
   if (req) {
+    if (!req.kId) {
+      socket.emit(type, data)
+      return
+    }
     if (req.gId) {
       params.gId = req.gId
     }
@@ -172,6 +176,9 @@ function GroupTxnsFind (socket, type, req) {
       // params.account = req.account
       params.member = {$elemMatch: {kId: req.kId}}
     }
+  } else {
+    socket.emit(type, data)
+    return
   }
   
   logger.info('group')

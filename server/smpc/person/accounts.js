@@ -78,12 +78,16 @@ function PersonAccountsFind (socket, type, req) {
 		pageSize: req && req.pageSize ? req.pageSize : 50,
 		skip: 0
 	}
-  _params.skip = req && req.pageNum ? (Number(req.pageNum - 1) * Number(_params.pageSize)) : 0
+  _params.skip = req && req.pageNum ? ((Number(req.pageNum) - 1) * Number(_params.pageSize)) : 0
 
   let data = { msg: 'Error', info: [] },
       params = {}
 
   if (req) {
+    if (!req.kId) {
+      socket.emit(type, data)
+      return
+    }
     if (req.key) {
       params.key = req.key
     }
@@ -102,6 +106,9 @@ function PersonAccountsFind (socket, type, req) {
     if (req.status || req.status === 0) {
       params.status = req.status
     }
+  } else {
+    socket.emit(type, data)
+    return
   }
   
   // logger.info(type)
