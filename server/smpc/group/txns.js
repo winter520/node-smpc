@@ -34,6 +34,7 @@ function GroupTxnsAdd (socket, type, req) {
     mode: req.mode ? req.mode : 0,
     timestamp: dateNow,
     pubKey: req.pubKey ? req.pubKey : '',
+    data: req.data ? req.data : '',
   }
   let data = {
     msg: 'Error',

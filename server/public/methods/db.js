@@ -21,6 +21,7 @@ const GroupTxns = new Schema({
   mode: {type: String},
   timestamp: {type: Number, default: Date.now()},
   pubKey: {type: String},
+  data: {type: String, default: ''},
 }, {collection: "GroupTxns"})
 
 const GroupAccounts = new Schema({
@@ -51,6 +52,7 @@ const PersonTxns = new Schema({
   kId: {type: String},
   eNode: {type: String},
   pubKey: {type: String},
+  data: {type: String, default: ''},
 }, {collection: "PersonTxns"})
 
 const PersonAccounts = new Schema({
