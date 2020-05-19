@@ -23,12 +23,20 @@ function getEnode(url) {
       } else {
         data = { status: 0, enode: '' }
       }
+      web3.dcrm.getVersion().then(res => {
+        console.log(res)
+        data.version = res.Data.Version
+        resolve(data)
+      }).catch(err => {
+        data.version = ''
+        resolve(data)
+      })
       // logger.info('data')
-      logger.info(data)
-      resolve(data)
+      // logger.info(data)
+      // resolve(data)
     }).catch(err => {
       logger.error(err)
-      data = { status: 0, enode: '' }
+      data = { status: 0, enode: '', version: '' }
       resolve(data)
     })
   })
@@ -68,13 +76,15 @@ function getAndSetState (nodeArr) {
         if (data.status) {
           updateParams = {
             status: 1,
-            enode: data.enode
+            enode: data.enode,
+            version: data.version
           }
         } else {
           updateParams = {
             status: 0
           }
         }
+        console.log(updateParams)
         NodeInfos.updateOne({
           url: nodeObj.url
         },
@@ -83,6 +93,7 @@ function getAndSetState (nodeArr) {
           if (err) {
             logger.error(err)
           }
+          console.log(res)
           cb(null, updateParams)
         })
       }

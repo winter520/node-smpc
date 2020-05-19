@@ -27,7 +27,7 @@ let nodeObj = {
 function getAllInfo () {
   async.waterfall([
     (cb) => {
-      NodeInfos.find({}, {url: 1, name: 1, status: 1, enode: 1, timestamp: 1, nodeType: 1}).sort({'sortId': -1, 'timestamp': 1}).exec((err, res) => {
+      NodeInfos.find({}, {url: 1, name: 1, status: 1, enode: 1, timestamp: 1, nodeType: 1, version: 1}).sort({'sortId': -1, 'timestamp': 1}).exec((err, res) => {
         if (err) {
           nodeObj.nodeList = []
           logger.error(err.toString())

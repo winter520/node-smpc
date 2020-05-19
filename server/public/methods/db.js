@@ -79,6 +79,7 @@ const NodeInfos = new Schema({
   status: {type: Number, default: 1},
   enode: {type: String},
   nodeType: {type: Number, default: 1},
+  version: {type: String, default:''},
 }, {collection: "NodeInfos"})
 
 const NodeInfosDev = new Schema({

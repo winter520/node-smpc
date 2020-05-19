@@ -157,6 +157,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: null
+    },
+    {
+      name: 'getVersion',
+      call: 'dcrm_getVersion',
+      params: 0,
+      inputFormatter: [],
+      outputFormatter: null
     }
   ]
 })
