@@ -32,6 +32,7 @@ function PersonTxnsAdd (socket, type, req) {
     mode: req.mode ? req.mode : '',
     pubKey: req.pubKey ? req.pubKey : '',
     data: req.data ? req.data : '',
+    expend: req.expend ? req.expend : {},
   })
   personTxns.save((err, res) => {
     if (err) {
@@ -73,11 +74,14 @@ function changePersonTxnsStatus (socket, type, req) {
     if (req.hash || req.hash === 0) {
       updateParams['hash'] = req.hash
     }
+    if (req.expend || req.expend === 0) {
+      updateParams['expend'] = req.expend
+    }
   }
-  logger.info('changePersonTxnsStatus')
-  logger.info(req)
-  logger.info(params)
-  logger.info(updateParams)
+  // logger.info('changePersonTxnsStatus')
+  // logger.info(req)
+  // logger.info(params)
+  // logger.info(updateParams)
   PersonTxnsEdit(params, updateParams).then(res => {
     data.msg = 'Success'
     data.info = res
@@ -125,9 +129,9 @@ function PersonTxnsFind (socket, type, req) {
     socket.emit(type, data)
     return
   }
-  logger.info('person')
-  logger.info(req)
-  logger.info(params)
+  // logger.info('person')
+  // logger.info(req)
+  // logger.info(params)
   async.waterfall([
     (cb) => {
       PersonTxns.find(params).sort({'timestamp': -1}).skip(Number(_params.skip)).limit(Number(_params.pageSize)).exec((err, res) => {

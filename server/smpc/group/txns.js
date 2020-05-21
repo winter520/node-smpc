@@ -35,6 +35,7 @@ function GroupTxnsAdd (socket, type, req) {
     timestamp: dateNow,
     pubKey: req.pubKey ? req.pubKey : '',
     data: req.data ? req.data : '',
+    expend: req.expend ? req.expend : {},
   }
   let data = {
     msg: 'Error',
@@ -91,10 +92,10 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
       updateParams['member.$.timestamp'] = Date.now()
     }
   }
-  logger.info('changeGroupMemberTxnsStatus')
-  logger.info(req)
-  logger.info(params)
-  logger.info(updateParams)
+  // logger.info('changeGroupMemberTxnsStatus')
+  // logger.info(req)
+  // logger.info(params)
+  // logger.info(updateParams)
   GroupTxnsEdit(params, updateParams).then(res => {
     data.msg = 'Success'
     data.info = res
@@ -122,11 +123,14 @@ function changeGroupTxnsStatus (socket, type, req) {
     if (req.hash || req.hash === 0) {
       updateParams['hash'] = req.hash
     }
+    if (req.expend || req.expend === 0) {
+      updateParams['expend'] = req.expend
+    }
   }
-  logger.info('changeGroupTxnsStatus')
-  logger.info(req)
-  logger.info(params)
-  logger.info(updateParams)
+  // logger.info('changeGroupTxnsStatus')
+  // logger.info(req)
+  // logger.info(params)
+  // logger.info(updateParams)
   GroupTxnsEdit(params, updateParams).then(res => {
     data.msg = 'Success'
     data.info = res
