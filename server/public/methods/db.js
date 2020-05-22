@@ -22,7 +22,7 @@ const GroupTxns = new Schema({
   timestamp: {type: Number, default: Date.now()},
   pubKey: {type: String},
   data: {type: String, default: ''},
-  expend: {type: Object, default: {}}
+  extendObj: {type: Object, default: {}}
 }, {collection: "GroupTxns"})
 
 const GroupAccounts = new Schema({
@@ -54,7 +54,7 @@ const PersonTxns = new Schema({
   eNode: {type: String},
   pubKey: {type: String},
   data: {type: String, default: ''},
-  expend: {type: Object, default: {}}
+  extendObj: {type: Object, default: {}}
 }, {collection: "PersonTxns"})
 
 const PersonAccounts = new Schema({

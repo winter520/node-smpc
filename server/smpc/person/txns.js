@@ -32,7 +32,7 @@ function PersonTxnsAdd (socket, type, req) {
     mode: req.mode ? req.mode : '',
     pubKey: req.pubKey ? req.pubKey : '',
     data: req.data ? req.data : '',
-    expend: req.expend ? req.expend : {},
+    extendObj: req.extendObj ? req.extendObj : {},
   })
   personTxns.save((err, res) => {
     if (err) {
@@ -74,8 +74,8 @@ function changePersonTxnsStatus (socket, type, req) {
     if (req.hash || req.hash === 0) {
       updateParams['hash'] = req.hash
     }
-    if (req.expend || req.expend === 0) {
-      updateParams['expend'] = req.expend
+    if (req.extendObj || req.extendObj === 0) {
+      updateParams['extendObj'] = req.extendObj
     }
   }
   // logger.info('changePersonTxnsStatus')
