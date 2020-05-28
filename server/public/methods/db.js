@@ -125,6 +125,35 @@ const UserEnodes = new Schema({
   friendsArr: {type: Array, default: []},
 }, {collection: "UserEnodes"})
 
+const PrivateTxns = new Schema({
+  keyId: {type: String, unique: true},
+  key: {type: String},
+  from: {type: String},
+  to: {type: String},
+  value: {type: Number},
+  nonce: {type: Number},
+  gId: {type: String},
+  coinType: {type: String},
+  hash: {type: String},
+  status: {type: Number, default: 0},
+  mode: {type: String},
+  timestamp: {type: Number, default: Date.now()},
+  kId: {type: String},
+  eNode: {type: String},
+  pubKey: {type: String},
+  data: {type: String, default: ''},
+  extendObj: {type: Object, default: {}}
+}, {collection: "PrivateTxns"})
+
+const PrivateAccounts = new Schema({
+  username: {type: String, unique: true},
+  address: {type: String},
+  updatetime: {type: Number, default: Date.now()},
+  password: {type: String},
+  ks: {type: String},
+  email: {type: String},
+  pubKeyArr: {type: Array, default: []},
+}, {collection: "PrivateAccounts"})
 // const FriendsSys = new Schema({
 //   username: {type: String},
 //   address: {type: String},
@@ -143,6 +172,8 @@ NodeInfosDev.index({sortId: -1, timestamp: -1}, {background: 1})
 UserInfo.index({timestamp: -1}, {background: 1})
 VersionInfo.index({timestamp: -1}, {background: 1})
 UserEnodes.index({updatetime: -1}, {background: 1})
+PrivateTxns.index({timestamp: -1}, {background: 1})
+PrivateAccounts.index({updatetime: -1}, {background: 1})
 // FriendsSys.index({timestamp: -1}, {background: 1})
 
 
@@ -155,6 +186,8 @@ mongoose.model('NodeInfosDev', NodeInfosDev)
 mongoose.model('UserInfo', UserInfo)
 mongoose.model('VersionInfo', VersionInfo)
 mongoose.model('UserEnodes', UserEnodes)
+mongoose.model('PrivateTxns', PrivateTxns)
+mongoose.model('PrivateAccounts', PrivateAccounts)
 // mongoose.model('FriendsSys', FriendsSys)
 
 
@@ -200,5 +233,7 @@ module.exports = {
   UserInfo: mongoose.model('UserInfo'),
   VersionInfo: mongoose.model('VersionInfo'),
   UserEnodes: mongoose.model('UserEnodes'),
+  PrivateTxns: mongoose.model('PrivateTxns'),
+  PrivateAccounts: mongoose.model('PrivateAccounts'),
   // FriendsSys: mongoose.model('FriendsSys'),
 }
