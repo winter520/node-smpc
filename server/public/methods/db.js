@@ -82,6 +82,7 @@ const NodeInfos = new Schema({
   enode: {type: String},
   nodeType: {type: Number, default: 1},
   version: {type: String, default:''},
+  onlineTime: {type: Number, default: Date.now()},
 }, {collection: "NodeInfos"})
 
 const NodeInfosDev = new Schema({

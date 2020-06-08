@@ -28,7 +28,7 @@ function getEnode(url) {
         data.version = res.Data.Version
         resolve(data)
       }).catch(err => {
-        data.version = ''
+        data = { status: 0, enode: '', version: '' }
         resolve(data)
       })
       // logger.info('data')
@@ -77,7 +77,8 @@ function getAndSetState (nodeArr) {
           updateParams = {
             status: 1,
             enode: data.enode,
-            version: data.version
+            version: data.version,
+            onlineTime: Date.now()
           }
         } else {
           updateParams = {
@@ -96,6 +97,28 @@ function getAndSetState (nodeArr) {
           console.log(res)
           cb(null, updateParams)
         })
+      },
+      (data, cb) => {
+        if (data.status) {
+          cb(null, data)
+        } else {
+          NodeInfos.findOne({ url: nodeObj.url }).exec((err, res) => {
+            if (err) {
+              logger.error(err)
+              cb(null, res)
+            } else {
+              if (res.onlineTime && ( (Date.now() - res.onlineTime) >= (1000 * 60 * 60 * 24 * 7) ) ) {
+              // if (res.onlineTime && ( (Date.now() - res.onlineTime) >= (1000 * 60) ) ) {
+                NodeInfos.remove({ url: nodeObj.url }).exec(() => {
+                  logger.warn('remove ' + nodeObj.url + 'success!')
+                  cb(null, res)
+                })
+              } else {
+                cb(null, res)
+              }
+            }
+          })
+        }
       }
     ], (err, res) => {
       callback(null, res)
@@ -105,6 +128,7 @@ function getAndSetState (nodeArr) {
     setTimeout(() => {
       getAllNode()
     }, 1000 * 60 * 30)
+    // }, 1000 * 60)
   })
 }
 

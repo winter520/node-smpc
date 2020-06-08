@@ -68,7 +68,8 @@ function NodeAdd (socket, type, req) {
         timestamp: dateNow,
         updatetime: dateNow,
         status: 1,
-        enode: dataObj.enode
+        enode: dataObj.enode,
+        onlineTime: dateNow
       })
       nodeInfos.save((err, res) => {
         if (err) {
@@ -181,7 +182,7 @@ function NodeEdit (socket, type, req) {
 
 function getNodeInfos (socket, type, req) {
   let data = { msg: 'Error', info: [] }
-  NodeInfos.find({}, {url: 1, name: 1, status: 1}).sort(publicSort).exec((err, res) => {
+  NodeInfos.find({}, {url: 1, name: 1, status: 1, version: 1}).sort(publicSort).exec((err, res) => {
     if (err) {
       data.msg = 'Error'
       data.error = err.toString()
