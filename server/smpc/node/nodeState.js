@@ -28,7 +28,7 @@ function getEnode(url) {
         data.version = res.Data.Version
         resolve(data)
       }).catch(err => {
-        data = { status: 0, enode: '', version: '' }
+        data.version = ''
         resolve(data)
       })
       // logger.info('data')
