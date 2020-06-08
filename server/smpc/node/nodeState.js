@@ -23,14 +23,19 @@ function getEnode(url) {
       } else {
         data = { status: 0, enode: '' }
       }
-      web3.dcrm.getVersion().then(res => {
-        console.log(res)
-        data.version = res.Data.Version
-        resolve(data)
-      }).catch(err => {
+      try {
+        web3.dcrm.getVersion().then(res => {
+          console.log(res)
+          data.version = res.Data.Version
+          resolve(data)
+        }).catch(err => {
+          data.version = ''
+          resolve(data)
+        })
+      } catch (error) {
         data.version = ''
         resolve(data)
-      })
+      }
       // logger.info('data')
       // logger.info(data)
       // resolve(data)
