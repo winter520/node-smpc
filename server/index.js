@@ -9,6 +9,7 @@ const UserInfos = require(pathLink + '/server/smpc/user/index')
 const SocialFn = require(pathLink + '/server/smpc/social/index')
 const TableDataFn = require(pathLink + '/server/smpc/tableData/index')
 const PrivateFn = require(pathLink + '/server/smpc/private/index')
+const SignsFn = require(pathLink + '/server/smpc/signs/index')
 
 function StartSocket (socket, io) {
   /**
@@ -39,6 +40,10 @@ function StartSocket (socket, io) {
    * 私有账户
    */
   PrivateFn(socket, io)
+  /**
+   * 签名
+   */
+  SignsFn(socket, io)
 }
 
 module.exports = StartSocket

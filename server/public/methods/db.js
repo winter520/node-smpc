@@ -14,7 +14,6 @@ const GroupTxns = new Schema({
   nonce: {type: Number},
   member: {type: Array, default: []},
   gId: {type: String},
-  txnId: {type: String},
   coinType: {type: String},
   hash: {type: String},
   status: {type: Number, default: 0},
@@ -47,11 +46,11 @@ const PersonTxns = new Schema({
   gId: {type: String},
   coinType: {type: String},
   hash: {type: String},
+  kId: {type: String},
+  eNode: {type: String},
   status: {type: Number, default: 0},
   mode: {type: String},
   timestamp: {type: Number, default: Date.now()},
-  kId: {type: String},
-  eNode: {type: String},
   pubKey: {type: String},
   data: {type: String, default: ''},
   extendObj: {type: Object, default: {}}
@@ -155,14 +154,27 @@ const PrivateAccounts = new Schema({
   email: {type: String},
   pubKeyArr: {type: Array, default: []},
 }, {collection: "PrivateAccounts"})
-// const FriendsSys = new Schema({
-//   username: {type: String},
-//   address: {type: String},
-//   // signAll: {type: String},
-//   unIP: {type: String},
-//   // outChain: {type: ObjectId, ref: 'UserEnodes'},
-//   timestamp: {type: Number},
-// }, {collection: "FriendsSys"})
+
+const Signs = new Schema({
+  keyId: {type: String, unique: true},
+  key: {type: String},
+  from: {type: String},
+  to: {type: String},
+  value: {type: Number},
+  nonce: {type: Number},
+  member: {type: Array, default: []},
+  gId: {type: String},
+  coinType: {type: String},
+  hash: {type: Array, default: []},
+  status: {type: Number, default: 0},
+  mode: {type: String},
+  timestamp: {type: Number, default: Date.now()},
+  pubKey: {type: String},
+  rsv: {type: Array, default: []},
+  data: {type: String, default: ''},
+  extendObj: {type: Object, default: {}},
+  accountType: {type: Number, default: 0},
+}, {collection: "Signs"})
 
 GroupTxns.index({timestamp: -1}, {background: 1})
 GroupAccounts.index({timestamp: -1}, {background: 1})
@@ -189,7 +201,7 @@ mongoose.model('VersionInfo', VersionInfo)
 mongoose.model('UserEnodes', UserEnodes)
 mongoose.model('PrivateTxns', PrivateTxns)
 mongoose.model('PrivateAccounts', PrivateAccounts)
-// mongoose.model('FriendsSys', FriendsSys)
+mongoose.model('Signs', Signs)
 
 
 mongoose.Promise = global.Promise
@@ -236,5 +248,5 @@ module.exports = {
   UserEnodes: mongoose.model('UserEnodes'),
   PrivateTxns: mongoose.model('PrivateTxns'),
   PrivateAccounts: mongoose.model('PrivateAccounts'),
-  // FriendsSys: mongoose.model('FriendsSys'),
+  Signs: mongoose.model('Signs'),
 }

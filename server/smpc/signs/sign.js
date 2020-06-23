@@ -2,21 +2,13 @@ const path = require('path').resolve('.')
 const pathLink = path
 const $$ = require(pathLink + '/server/public/methods/methods')
 require($$.config.link.db)
-const logger = require($$.config.link.logger).getLogger($$.config.log.client + 'GroupTxns')
+const logger = require($$.config.link.logger).getLogger($$.config.log.client + 'Signs')
 const mongoose = require('mongoose')
 const async = require('async')
 
-const GroupTxns = mongoose.model('GroupTxns')
+const Signs = mongoose.model('Signs')
 
-function gBroadcastTxns (socket, data) {
-  for (let obj of data) {
-    if (Number(obj.status) === 0) {
-      socket.emit(obj.kId, obj)
-    }
-  }
-}
-
-function GroupTxnsAdd (socket, type, req) {
+function SignsAdd (socket, type, req) {
   let dateNow = Date.now()
   let params = {
     keyId: dateNow + req.key,
@@ -28,20 +20,22 @@ function GroupTxnsAdd (socket, type, req) {
     member: req.gArr ? req.gArr : [],
     gId: req.gId ? req.gId : '',
     coinType: req.coinType ? req.coinType : 0,
-    hash: req.hash ? req.hash : '',
+    hash: req.hash && req.hash.length > 0 ? req.hash : [],
     status: req.status ? req.status : 0,
     mode: req.mode ? req.mode : 0,
     timestamp: dateNow,
     pubKey: req.pubKey ? req.pubKey : '',
+    rsv: req.rsv && req.rsv.length > 0 ? req.rsv : [],
     data: req.data ? req.data : '',
     extendObj: req.extendObj ? req.extendObj : {},
+    accountType: req.accountType ? req.accountType : 0,
   }
   let data = {
     msg: 'Error',
     info: ''
   }
   console.log(params)
-  let groupTxns = new GroupTxns(params)
+  let groupTxns = new Signs(params)
   groupTxns.save((err, res) => {
     if (err) {
       data.error = err.toString()
@@ -50,13 +44,12 @@ function GroupTxnsAdd (socket, type, req) {
       data.info = res
     }
     socket.emit(type, data)
-    gBroadcastTxns(socket, req.gArr)
   })
 }
 
-function GroupTxnsEdit (params, updateParams) {
+function SignsEdit (params, updateParams) {
   return new Promise((resolve, reject) => {
-    GroupTxns.updateOne(params, updateParams).exec((err, res) => {
+    Signs.updateOne(params, updateParams).exec((err, res) => {
       if (err) {
         reject(err)
       } else {
@@ -66,7 +59,7 @@ function GroupTxnsEdit (params, updateParams) {
   })
 }
 
-function changeGroupMemberTxnsStatus (socket, type, req) {
+function changeSignMemberStatus (socket, type, req) {
   let params = {}, updateParams = {}
   let data = {
     msg: 'Error',
@@ -91,11 +84,11 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
       updateParams['member.$.timestamp'] = Date.now()
     }
   }
-  // logger.info('changeGroupMemberTxnsStatus')
+  // logger.info('changeSignMemberStatus')
   // logger.info(req)
   // logger.info(params)
   // logger.info(updateParams)
-  GroupTxnsEdit(params, updateParams).then(res => {
+  SignsEdit(params, updateParams).then(res => {
     data.msg = 'Success'
     data.info = res
     socket.emit(type, data)
@@ -105,7 +98,7 @@ function changeGroupMemberTxnsStatus (socket, type, req) {
   })
 }
 
-function changeGroupTxnsStatus (socket, type, req) {
+function changeSignsStatus (socket, type, req) {
   let params = {}, updateParams = {}
   let data = {
     msg: 'Error',
@@ -122,15 +115,18 @@ function changeGroupTxnsStatus (socket, type, req) {
     if (req.hash || req.hash === 0) {
       updateParams['hash'] = req.hash
     }
-    if (req.extendObj || req.extendObj === 0) {
-      updateParams['extendObj'] = req.extendObj
+    if (req.rsv || req.rsv === 0) {
+      updateParams['rsv'] = req.rsv
+    }
+    if (req.extendObj && req.extendObj.hash) {
+      updateParams['extendObj.hash'] = req.extendObj.hash
     }
   }
-  // logger.info('changeGroupTxnsStatus')
+  // logger.info('changeSignsStatus')
   // logger.info(req)
   // logger.info(params)
   // logger.info(updateParams)
-  GroupTxnsEdit(params, updateParams).then(res => {
+  SignsEdit(params, updateParams).then(res => {
     data.msg = 'Success'
     data.info = res
     socket.emit(type, data)
@@ -140,7 +136,7 @@ function changeGroupTxnsStatus (socket, type, req) {
   })
 }
 
-function GroupTxnsFind (socket, type, req) {
+function SignsFind (socket, type, req) {
   let _params = {
 		pageSize: req && req.pageSize ? req.pageSize : 50,
 		skip: 0
@@ -149,17 +145,16 @@ function GroupTxnsFind (socket, type, req) {
 
   let data = { msg: 'Error', info: [] },
       params = {}
-
+  console.log(req)
   if (req) {
-    if (!req.kId) {
-      socket.emit(type, data)
-      return
-    }
     if (req.gId) {
       params.gId = req.gId
     }
     if (req.key) {
       params.key = req.key
+    }
+    if (req.pubKey) {
+      params.pubKey = req.pubKey
     }
     if (req.from || req.from === 0) {
       params.from = req.from
@@ -176,6 +171,10 @@ function GroupTxnsFind (socket, type, req) {
     if (req.status || req.status === 0) {
       params.status = req.status
     }
+    if (req.extendObj && req.extendObj.type) {
+      // params.account = req.account
+      params['extendObj.type'] = req.extendObj.type
+    }
     if (req.kId || req.kId === 0) {
       // params.account = req.account
       params.member = {$elemMatch: {kId: req.kId}}
@@ -185,12 +184,12 @@ function GroupTxnsFind (socket, type, req) {
     return
   }
   
-  logger.info('group')
+  logger.info('SignsFind')
   logger.info(req)
   logger.info(params)
   async.waterfall([
     (cb) => {
-      GroupTxns.find(params).sort({'timestamp': -1}).skip(Number(_params.skip)).limit(Number(_params.pageSize)).exec((err, res) => {
+      Signs.find(params).sort({'timestamp': -1}).skip(Number(_params.skip)).limit(Number(_params.pageSize)).exec((err, res) => {
         if (err) {
           cb(err)
         } else {
@@ -199,7 +198,7 @@ function GroupTxnsFind (socket, type, req) {
       })
     },
     (list, cb) => {
-      GroupTxns.find(params).countDocuments((err, results) => {
+      Signs.find(params).countDocuments((err, results) => {
         if (err) {
           cb(err)
         } else {
@@ -221,28 +220,18 @@ function GroupTxnsFind (socket, type, req) {
   })
 }
 
-function GroupTxnsFn (socket, io) {
-  socket.on('GroupAddTxns', (req) => {
-    GroupTxnsAdd(socket, 'GroupAddTxns', req, io)
+function SignsFn (socket, io) {
+  socket.on('SignsAdd', (req) => {
+    SignsAdd(socket, 'SignsAdd', req, io)
   })
-  // socket.on('GroupEditTxns', (req) => {
-  //   GroupTxns.Edit(socket, 'GroupEditTxns', req, io)
-  // })
-  socket.on('changeGroupMemberTxnsStatus', (req) => {
-    changeGroupMemberTxnsStatus(socket, 'changeGroupMemberTxnsStatus', req, io)
+  socket.on('changeSignMemberStatus', (req) => {
+    changeSignMemberStatus(socket, 'changeSignMemberStatus', req, io)
   })
-  socket.on('changeGroupTxnsStatus', (req) => {
-    changeGroupTxnsStatus(socket, 'changeGroupTxnsStatus', req, io)
+  socket.on('changeSignsStatus', (req) => {
+    changeSignsStatus(socket, 'changeSignsStatus', req, io)
   })
-  socket.on('GroupFindTxns', (req) => {
-    GroupTxnsFind(socket, 'GroupFindTxns', req, io)
+  socket.on('SignsFind', (req) => {
+    SignsFind(socket, 'SignsFind', req, io)
   })
 }
-module.exports = GroupTxnsFn
-// module.exports = {
-//   Add: GroupTxnsAdd,
-//   // Edit: GroupTxnsEdit,
-//   Find: GroupTxnsFind,
-//   changeGroupMemberTxnsStatus: changeGroupMemberTxnsStatus,
-//   changeGroupTxnsStatus: changeGroupTxnsStatus,
-// }
+module.exports = SignsFn
