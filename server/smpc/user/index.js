@@ -52,66 +52,73 @@ function EmailValidRegister (socket, type, req) {
     }
   }
   logger.info(req)
-  async.waterfall([
-    (cb) => {
-      // UserInfo.find({email: req.email}).countDocuments((err, count) => {
-      //   if (err) {
-      //     cb(err)
-      //   } else {
-      //     if (count > 0) {
-      //       cb('Repeat')
-      //     } else {
-      //       cb(null, count)
-      //     }
-      //   }
-      // })
-      cb(null, 0)
-    },
-    (count, cb) => {
-      const mail = {
-        // 发件人
-        from: 'SMPCWallet<' + email[emailService].auth.user + '>',
-        // from: email.auth.user,
-        // 主题
-        subject: sendObj.subject,
-        // 收件人
-        to: req.email,
-        // 邮件内容，HTML格式
-        html: sendObj.cont//接收激活请求的链接
-      }
-      logger.info(mail)
-      send(mail, emailService).then(res => {
-        logger.info(res)
-        if (res.msg === 'Error') {
-          // data.error = res.error
-          cb(res.error)
-        } else {
-          emailCodeObj[req.email] = {
-            code: code,
-            timestamp: dateNow
-          }
-          // console.log(emailCodeObj)
-          setTimeout(() => {
-            if (emailCodeObj[req.email]) {
-              delete emailCodeObj[req.email]
-            }
-          // }, 1000 * 6)
-          }, 1000 * 60 * 60)
-          data.info = 'Send success'
-          cb(null, data)
-        }
-      })
+  // async.waterfall([
+  //   (cb) => {
+  //     // UserInfo.find({email: req.email}).countDocuments((err, count) => {
+  //     //   if (err) {
+  //     //     cb(err)
+  //     //   } else {
+  //     //     if (count > 0) {
+  //     //       cb('Repeat')
+  //     //     } else {
+  //     //       cb(null, count)
+  //     //     }
+  //     //   }
+  //     // })
+  //     cb(null, 0)
+  //   },
+  //   (count, cb) => {
+  //     const mail = {
+  //       // 发件人
+  //       from: 'SMPCWallet<' + email[emailService].auth.user + '>',
+  //       // from: email.auth.user,
+  //       // 主题
+  //       subject: sendObj.subject,
+  //       // 收件人
+  //       to: req.email,
+  //       // 邮件内容，HTML格式
+  //       html: sendObj.cont//接收激活请求的链接
+  //     }
+  //     logger.info(mail)
+  //     send(mail, emailService).then(res => {
+  //       logger.info(res)
+  //       if (res.msg === 'Error') {
+  //         // data.error = res.error
+  //         cb(res.error)
+  //       } else {
+  //         emailCodeObj[req.email] = {
+  //           code: code,
+  //           timestamp: dateNow
+  //         }
+  //         // console.log(emailCodeObj)
+  //         setTimeout(() => {
+  //           if (emailCodeObj[req.email]) {
+  //             delete emailCodeObj[req.email]
+  //           }
+  //         // }, 1000 * 6)
+  //         }, 1000 * 60 * 60)
+  //         data.info = 'Send success'
+  //         cb(null, data)
+  //       }
+  //     })
+  //   }
+  // ], (err, res) => {
+  //   if (err) {
+  //     data.error = err
+  //   } else {
+  //     data.msg = 'Success'
+  //   }
+  //   logger.info(type)
+  //   logger.info(data)
+  //   socket.emit(type, data)
+  // })
+    emailCodeObj[req.email] = {
+      code: 111111,
+      timestamp: dateNow
     }
-  ], (err, res) => {
-    if (err) {
-      data.error = err
-    } else {
-      data.msg = 'Success'
-    }
-    logger.info(type)
-    logger.info(data)
+    data.msg = 'Success'
+    data.info = 'Send success'
     socket.emit(type, data)
-  })
 }
 
 function UserInfoAdd (socket, type, req) {
