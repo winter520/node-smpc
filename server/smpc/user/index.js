@@ -113,7 +113,7 @@ function EmailValidRegister (socket, type, req) {
   //   socket.emit(type, data)
   // })
     emailCodeObj[req.email] = {
-      code: 111111,
+      code: '111111',
       timestamp: dateNow
     }
     data.msg = 'Success'
