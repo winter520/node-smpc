@@ -24,7 +24,7 @@ function NodeAdd (socket, type, req) {
         status: 0
       }
       web3.setProvider(req.url)
-      web3.dcrm.getEnode().then(res => {
+      web3.smpc.getEnode().then(res => {
         let cbData = res
         if (typeof res === 'string') {
           cbData = JSON.parse(cbData)
@@ -122,7 +122,7 @@ function NodeEdit (socket, type, req) {
         status: 0
       }
       web3.setProvider(req.url)
-      web3.dcrm.getEnode().then(res => {
+      web3.smpc.getEnode().then(res => {
         let cbData = res
         if (typeof res === 'string') {
           cbData = JSON.parse(cbData)

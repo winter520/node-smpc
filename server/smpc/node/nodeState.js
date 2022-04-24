@@ -12,7 +12,7 @@ function getEnode(url) {
   return new Promise(resolve => {
     let data = { enode: '', status: 0 }
     web3.setProvider(url)
-    web3.dcrm.getEnode().then(res => {
+    web3.smpc.getEnode().then(res => {
       let cbData = res
       if (typeof res === 'string') {
         cbData = JSON.parse(cbData)
@@ -24,7 +24,7 @@ function getEnode(url) {
         data = { status: 0, enode: '' }
       }
       try {
-        web3.dcrm.getVersion().then(res => {
+        web3.smpc.getVersion().then(res => {
           console.log(res)
           data.version = res.Data.Version
           resolve(data)
